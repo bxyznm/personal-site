@@ -40,7 +40,7 @@ export default function NewsletterSubscribe({
               Thanks for subscribing!
             </h3>
             <p className="text-text-muted text-sm">
-              You'll be notified about new posts soon.
+              You&apos;ll be notified about new posts soon.
             </p>
           </div>
         </div>
