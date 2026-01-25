@@ -48,14 +48,14 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Configure AWS credentials (OIDC)
-        if: secrets.TF_AWS_ROLE_ARN != ''
+        if: ${{ secrets.TF_AWS_ROLE_ARN != '' }}
         uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: ${{ secrets.TF_AWS_ROLE_ARN }}
           aws-region: ${{ env.AWS_REGION }}
 
       - name: Configure AWS credentials (IAM User - Bootstrap)
-        if: secrets.TF_AWS_ROLE_ARN == ''
+        if: ${{ secrets.TF_AWS_ROLE_ARN == '' }}
         uses: aws-actions/configure-aws-credentials@v4
         with:
           aws-access-key-id: ${{ secrets.TF_AWS_ACCESS_KEY_ID }}
