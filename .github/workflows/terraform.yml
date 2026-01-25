@@ -47,15 +47,24 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Determine auth method
+        id: auth_method
+        run: |
+          if [ -n "${{ secrets.TF_AWS_ROLE_ARN }}" ]; then
+            echo "use_oidc=true" >> $GITHUB_OUTPUT
+          else
+            echo "use_oidc=false" >> $GITHUB_OUTPUT
+          fi
+
       - name: Configure AWS credentials (OIDC)
-        if: ${{ secrets.TF_AWS_ROLE_ARN != '' }}
+        if: steps.auth_method.outputs.use_oidc == 'true'
         uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: ${{ secrets.TF_AWS_ROLE_ARN }}
           aws-region: ${{ env.AWS_REGION }}
 
       - name: Configure AWS credentials (IAM User - Bootstrap)
-        if: ${{ secrets.TF_AWS_ROLE_ARN == '' }}
+        if: steps.auth_method.outputs.use_oidc == 'false'
         uses: aws-actions/configure-aws-credentials@v4
         with:
           aws-access-key-id: ${{ secrets.TF_AWS_ACCESS_KEY_ID }}
