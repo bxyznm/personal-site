@@ -150,6 +150,30 @@ jobs:
             echo "No existing GitHub OIDC provider found in account - Terraform will create one if needed"
           fi
 
+      - name: Pre-create ACM certificate when creating DNS records
+        if: always()
+        run: |
+          set -euo pipefail
+
+          # Check terraform.tfvars for create_dns_records = true
+          if grep -E "^\s*create_dns_records\s*=\s*true\b" terraform.tfvars >/dev/null 2>&1; then
+            echo "create_dns_records is true — running targeted apply for ACM certificate"
+
+            # Initialize again to ensure backend and providers are ready
+            terraform init -backend-config=backend.hcl
+
+            # If the certificate resource isn't yet created, apply it to populate domain_validation_options
+            terraform state list 2>/dev/null | grep -q '^aws_acm_certificate.website$' || true
+            if ! terraform state list 2>/dev/null | grep -q '^aws_acm_certificate.website$'; then
+              echo "Applying only aws_acm_certificate.website to obtain domain validation options"
+              terraform apply -target=aws_acm_certificate.website -auto-approve || true
+            else
+              echo "aws_acm_certificate.website already exists in state"
+            fi
+          else
+            echo "create_dns_records is not enabled — skipping pre-create step"
+          fi
+
       - name: Terraform Plan
         id: plan
         if: github.event.inputs.action == 'plan' || github.event.inputs.action == 'apply' || github.event_name == 'push'
