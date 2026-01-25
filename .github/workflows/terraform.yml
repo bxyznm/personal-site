@@ -47,27 +47,20 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Configure AWS credentials (IAM User - Bootstrap)
-        if: always()  # Always runs, logic handled inside
-        run: |
-          if [ -n "${{ secrets.TF_AWS_ROLE_ARN }}" ] && [ "${{ secrets.TF_AWS_ROLE_ARN }}" != " " ]; then
-            echo "OIDC Role ARN is set, skipping IAM User bootstrap"
-            exit 0
-          fi
-          echo "Proceeding with IAM User credentials"
-          aws configure set aws_access_key_id "${{ secrets.TF_AWS_ACCESS_KEY_ID }}"
-          aws configure set aws_secret_access_key "${{ secrets.TF_AWS_SECRET_ACCESS_KEY }}"
-          aws configure set region "${{ env.AWS_REGION }}"
-
       - name: Configure AWS credentials (OIDC)
-        if: always()  # Always runs, logic handled inside
-        run: |
-          if [ -z "${{ secrets.TF_AWS_ROLE_ARN }}" ] || [ "${{ secrets.TF_AWS_ROLE_ARN }}" = " " ]; then
-            echo "OIDC Role ARN not set, skipping OIDC credential setup"
-            exit 0
-          fi
-          echo "Proceeding with OIDC role credentials"
-          # You may use an AWS CLI call or the official credential action again via composite action if needed
+        if: secrets.TF_AWS_ROLE_ARN != ''
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.TF_AWS_ROLE_ARN }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Configure AWS credentials (IAM User - Bootstrap)
+        if: secrets.TF_AWS_ROLE_ARN == ''
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.TF_AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.TF_AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
