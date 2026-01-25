@@ -26,6 +26,7 @@ terraform {
 
 provider "aws" {
   region = var.aws_region
+  skip_region_validation   = true
 
   default_tags {
     tags = local.common_tags
