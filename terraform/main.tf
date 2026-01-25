@@ -11,15 +11,15 @@ terraform {
   # Backend configuration
   # When using GitHub Actions, the backend is configured dynamically via backend.hcl
   # For local development, uncomment and configure:
-  #
-  # backend "s3" {
-  #   bucket         = "your-terraform-state-bucket"
-  #   key            = "portfolio/terraform.tfstate"
-  #   region         = "mexico-central-1"
-  #   encrypt        = true
-  #   dynamodb_table = "terraform-locks"
-  # }
-  #
+  
+  backend "s3" {
+    bucket         = "060795926773-personal-site-tfstate"
+    key            = "portfolio/terraform.tfstate"
+    region         = "mexico-central-1"
+    encrypt        = true
+    dynamodb_table = "terraform-locks"
+  }
+  
   # Or run locally with: terraform init -backend-config=backend.hcl
   # (Create backend.hcl with your values - it's in .gitignore)
 }

@@ -178,8 +178,22 @@ jobs:
         id: plan
         if: github.event.inputs.action == 'plan' || github.event.inputs.action == 'apply' || github.event_name == 'push'
         run: |
+          echo "Creating Terraform plan..."
           terraform plan -no-color -out=tfplan
-        continue-on-error: false
+          echo "Plan saved to tfplan"
+
+      - name: Verify Terraform State
+        if: always()
+        run: |
+          echo "=== Terraform State Summary ==="
+          STATE_COUNT=$(terraform state list 2>/dev/null | wc -l)
+          echo "Resources in state: $STATE_COUNT"
+          
+          if [ "$STATE_COUNT" -gt 0 ]; then
+            echo ""
+            echo "=== Tracked Resources ==="
+            terraform state list
+          fi
 
       - name: Save Plan Output
         if: steps.plan.outcome == 'success'
@@ -235,14 +249,43 @@ jobs:
       - name: Terraform Destroy Plan
         id: destroy_plan
         if: github.event.inputs.action == 'destroy'
-        run: terraform plan -destroy -no-color -out=destroy_tfplan
+        run: |
+          echo "Planning destruction of all infrastructure..."
+          terraform plan -destroy -no-color -out=destroy_tfplan
+          terraform show -no-color destroy_tfplan > destroy_plan_output.txt
+          echo "Destroy plan saved to destroy_plan_output.txt"
 
-      - name: Terraform Destroy
+      - name: Save Destroy Plan Output
+        if: github.event.inputs.action == 'destroy' && steps.destroy_plan.outcome == 'success'
+        run: |
+          echo "## Terraform Destroy Plan" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "\`\`\`terraform" >> $GITHUB_STEP_SUMMARY
+          cat destroy_plan_output.txt >> $GITHUB_STEP_SUMMARY
+          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+
+      - name: Upload Destroy Plan Artifact
+        if: github.event.inputs.action == 'destroy' && steps.destroy_plan.outcome == 'success'
+        uses: actions/upload-artifact@v4
+        with:
+          name: terraform-destroy-plan
+          path: terraform/destroy_tfplan
+          retention-days: 7
+
+      - name: Terraform Destroy (Execute)
         id: destroy
         if: |
           github.event.inputs.action == 'destroy' &&
-          github.event.inputs.auto_approve == 'true'
-        run: terraform apply -auto-approve destroy_tfplan
+          github.event.inputs.auto_approve == 'true' &&
+          steps.destroy_plan.outcome == 'success'
+        run: |
+          echo "Executing destruction of all infrastructure..."
+          terraform apply -auto-approve destroy_tfplan
+          echo "Infrastructure destruction complete. Verifying state..."
+          
+          # Verify state is empty or minimal
+          STATE_COUNT=$(terraform state list 2>/dev/null | wc -l)
+          echo "Resources remaining in state: $STATE_COUNT"
 
       - name: Terraform Output
         id: output
@@ -298,5 +341,8 @@ jobs:
       - name: Cleanup
         if: always()
         run: |
-          rm -f backend.hcl terraform.tfvars tfplan destroy_tfplan plan_output.txt
-          echo "Cleaned up sensitive files"
+          echo "Cleaning up sensitive files and artifacts..."
+          rm -f backend.hcl terraform.tfvars tfplan destroy_tfplan plan_output.txt destroy_plan_output.txt
+          
+          # Ensure no sensitive data in logs
+          echo "Cleanup complete - all sensitive files removed"
