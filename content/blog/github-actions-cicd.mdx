@@ -1,0 +1,162 @@
+---
+title: "Building Effective CI/CD Pipelines with GitHub Actions"
+date: "2024-01-01"
+excerpt: "Learn how to create efficient, secure CI/CD pipelines using GitHub Actions. From basic workflows to advanced patterns like matrix builds and reusable workflows."
+tags: ["CI/CD", "GitHub Actions", "Automation"]
+---
+
+GitHub Actions has become my go-to tool for CI/CD. It's powerful, flexible, and integrated directly with your code. Let me share patterns that have worked well in production.
+
+## Basic Workflow Structure
+
+Every GitHub Actions workflow follows this structure:
+
+```yaml
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build
+        run: npm run build
+```
+
+## Multi-Stage Pipeline
+
+For production deployments, I use a multi-stage approach:
+
+```yaml
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run tests
+        run: npm test
+
+  build:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build
+        run: npm run build
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: build
+          path: dist/
+
+  deploy:
+    needs: build
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: build
+      - name: Deploy to AWS
+        run: aws s3 sync . s3://${{ secrets.S3_BUCKET }}
+```
+
+## Matrix Builds
+
+Test across multiple versions simultaneously:
+
+```yaml
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [18, 20, 22]
+        os: [ubuntu-latest, macos-latest]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+      - run: npm test
+```
+
+## Caching for Speed
+
+Cache dependencies to speed up builds:
+
+```yaml
+- uses: actions/cache@v4
+  with:
+    path: ~/.npm
+    key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+    restore-keys: |
+      ${{ runner.os }}-node-
+```
+
+## Security Best Practices
+
+### 1. Use Environment Secrets
+
+Never hardcode credentials:
+
+```yaml
+env:
+  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+```
+
+### 2. Pin Action Versions
+
+Use SHA hashes for third-party actions:
+
+```yaml
+- uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+```
+
+### 3. Limit Permissions
+
+Use minimal GITHUB_TOKEN permissions:
+
+```yaml
+permissions:
+  contents: read
+  packages: write
+```
+
+## Reusable Workflows
+
+Create workflows that can be called from other repositories:
+
+```yaml
+# .github/workflows/deploy.yml
+name: Deploy
+
+on:
+  workflow_call:
+    inputs:
+      environment:
+        required: true
+        type: string
+    secrets:
+      AWS_ACCESS_KEY_ID:
+        required: true
+```
+
+## Debugging Tips
+
+1. **Enable debug logging** - Set `ACTIONS_STEP_DEBUG` secret to `true`
+2. **Use `tmate` for SSH access** - Debug failing workflows interactively
+3. **Check the workflow syntax** - Use `actionlint` locally
+
+## Conclusion
+
+GitHub Actions provides everything needed for modern CI/CD. Start simple, add complexity as needed, and always prioritize security. Your deployment pipeline is only as strong as its weakest link.

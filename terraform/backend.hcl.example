@@ -1,0 +1,21 @@
+# Terraform Backend Configuration
+# Copy this file to backend.hcl and fill in your values
+# backend.hcl is in .gitignore to prevent committing sensitive data
+
+# S3 bucket for storing Terraform state
+bucket = "your-terraform-state-bucket"
+
+# Path to the state file within the bucket
+key = "portfolio/terraform.tfstate"
+
+# AWS region where the state bucket is located
+region = "mexico-central-1"
+
+# Enable encryption at rest
+encrypt = true
+
+# DynamoDB table for state locking
+dynamodb_table = "terraform-locks"
+
+# Usage:
+# terraform init -backend-config=backend.hcl

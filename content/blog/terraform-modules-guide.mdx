@@ -1,0 +1,141 @@
+---
+title: "Building Reusable Terraform Modules"
+date: "2024-01-08"
+excerpt: "A practical guide to creating modular, maintainable Terraform code. Learn patterns for building reusable infrastructure components."
+tags: ["Terraform", "IaC", "AWS"]
+---
+
+Terraform modules are the key to maintaining clean, reusable infrastructure code. In this guide, I'll walk through patterns I've developed over years of managing cloud infrastructure.
+
+## Why Modules?
+
+Without modules, Terraform configurations become unwieldy as they grow. Modules provide:
+
+- **Reusability** - Write once, use everywhere
+- **Encapsulation** - Hide complexity behind clean interfaces
+- **Consistency** - Ensure standards across your organization
+
+## Module Structure
+
+Here's my recommended structure for a Terraform module:
+
+```
+modules/vpc/
+├── main.tf          # Primary resources
+├── variables.tf     # Input variables
+├── outputs.tf       # Output values
+├── versions.tf      # Provider requirements
+└── README.md        # Documentation
+```
+
+## Practical Example: VPC Module
+
+Let's build a reusable VPC module:
+
+```hcl
+# modules/vpc/variables.tf
+variable "name" {
+  description = "Name prefix for resources"
+  type        = string
+}
+
+variable "cidr" {
+  description = "VPC CIDR block"
+  type        = string
+  default     = "10.0.0.0/16"
+}
+
+variable "azs" {
+  description = "Availability zones"
+  type        = list(string)
+}
+```
+
+```hcl
+# modules/vpc/main.tf
+resource "aws_vpc" "main" {
+  cidr_block           = var.cidr
+  enable_dns_hostnames = true
+  enable_dns_support   = true
+
+  tags = {
+    Name = "${var.name}-vpc"
+  }
+}
+
+resource "aws_subnet" "public" {
+  count             = length(var.azs)
+  vpc_id            = aws_vpc.main.id
+  cidr_block        = cidrsubnet(var.cidr, 8, count.index)
+  availability_zone = var.azs[count.index]
+
+  tags = {
+    Name = "${var.name}-public-${var.azs[count.index]}"
+  }
+}
+```
+
+```hcl
+# modules/vpc/outputs.tf
+output "vpc_id" {
+  description = "VPC ID"
+  value       = aws_vpc.main.id
+}
+
+output "public_subnet_ids" {
+  description = "Public subnet IDs"
+  value       = aws_subnet.public[*].id
+}
+```
+
+## Using the Module
+
+```hcl
+module "vpc" {
+  source = "./modules/vpc"
+
+  name = "production"
+  cidr = "10.0.0.0/16"
+  azs  = ["us-east-1a", "us-east-1b", "us-east-1c"]
+}
+
+# Reference outputs
+resource "aws_instance" "web" {
+  subnet_id = module.vpc.public_subnet_ids[0]
+  # ...
+}
+```
+
+## Best Practices
+
+### 1. Version Your Modules
+
+Use semantic versioning and pin versions in production:
+
+```hcl
+module "vpc" {
+  source  = "git::https://github.com/org/modules.git//vpc?ref=v1.2.0"
+}
+```
+
+### 2. Validate Inputs
+
+Use validation blocks for input constraints:
+
+```hcl
+variable "cidr" {
+  type = string
+  validation {
+    condition     = can(cidrhost(var.cidr, 0))
+    error_message = "Must be a valid CIDR block."
+  }
+}
+```
+
+### 3. Document Everything
+
+Include a README with examples and requirements.
+
+## Conclusion
+
+Well-designed modules transform Terraform from configuration scripts into a powerful infrastructure platform. Start small, iterate, and your future self will thank you.

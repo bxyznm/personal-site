@@ -1,0 +1,19 @@
+# Copy this file to terraform.tfvars and fill in your values
+
+# Required
+domain_name = "yourdomain.com"
+
+# Optional
+project_name = "sre-portfolio"
+aws_region   = "mexico-central-1"  # AWS Mexico Region
+environment  = "production"
+
+# Route53 DNS (optional - set to true if using Route53)
+create_dns_records = false
+route53_zone_id    = "" # Your Route53 hosted zone ID
+
+# Additional tags
+tags = {
+  Owner   = "your-name"
+  Purpose = "Personal Portfolio"
+}

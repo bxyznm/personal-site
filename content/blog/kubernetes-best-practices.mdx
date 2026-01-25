@@ -1,0 +1,91 @@
+---
+title: "Kubernetes Best Practices for Production"
+date: "2024-01-15"
+excerpt: "Essential Kubernetes configurations and patterns for running reliable production workloads. Learn about resource limits, health checks, and security best practices."
+tags: ["Kubernetes", "DevOps", "Best Practices"]
+---
+
+Running Kubernetes in production requires careful attention to detail. In this post, I'll share the essential configurations and patterns that have helped me maintain reliable clusters.
+
+## Resource Management
+
+One of the most common mistakes in Kubernetes is not setting proper resource limits. Without them, a single misbehaving pod can take down your entire node.
+
+```yaml
+resources:
+  requests:
+    memory: "128Mi"
+    cpu: "100m"
+  limits:
+    memory: "256Mi"
+    cpu: "200m"
+```
+
+### Why Requests Matter
+
+Resource **requests** tell the scheduler how much capacity your pod needs. The scheduler uses this to place pods on nodes with sufficient resources.
+
+Resource **limits** cap the maximum resources a pod can consume. If a pod exceeds its memory limit, it gets OOMKilled. If it exceeds CPU, it gets throttled.
+
+## Health Checks
+
+Always configure both liveness and readiness probes:
+
+```yaml
+livenessProbe:
+  httpGet:
+    path: /health
+    port: 8080
+  initialDelaySeconds: 30
+  periodSeconds: 10
+
+readinessProbe:
+  httpGet:
+    path: /ready
+    port: 8080
+  initialDelaySeconds: 5
+  periodSeconds: 5
+```
+
+**Liveness probes** tell Kubernetes when to restart a container. If the probe fails, Kubernetes kills the pod and starts a new one.
+
+**Readiness probes** tell Kubernetes when a pod is ready to receive traffic. Failed readiness probes remove the pod from service endpoints.
+
+## Security Context
+
+Run containers as non-root and drop unnecessary capabilities:
+
+```yaml
+securityContext:
+  runAsNonRoot: true
+  runAsUser: 1000
+  readOnlyRootFilesystem: true
+  capabilities:
+    drop:
+      - ALL
+```
+
+## Pod Disruption Budgets
+
+Protect your availability during cluster operations:
+
+```yaml
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: my-app-pdb
+spec:
+  minAvailable: 2
+  selector:
+    matchLabels:
+      app: my-app
+```
+
+## Key Takeaways
+
+1. **Always set resource requests and limits** - Prevent resource starvation
+2. **Configure health checks** - Enable self-healing
+3. **Use security contexts** - Follow principle of least privilege
+4. **Set PDBs** - Maintain availability during updates
+
+These practices have helped me maintain 99.9% uptime across multiple production clusters. Start with these basics, and you'll have a solid foundation for reliability.

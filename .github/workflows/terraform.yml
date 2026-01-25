@@ -1,0 +1,249 @@
+name: Terraform Infrastructure
+
+on:
+  workflow_dispatch:
+    inputs:
+      action:
+        description: 'Terraform action to perform'
+        required: true
+        type: choice
+        options:
+          - plan
+          - apply
+          - destroy
+        default: 'plan'
+      auto_approve:
+        description: 'Auto-approve apply/destroy (skip manual approval)'
+        required: false
+        type: boolean
+        default: false
+
+  push:
+    branches:
+      - main
+    paths:
+      - 'terraform/**'
+      - '.github/workflows/terraform.yml'
+
+env:
+  TF_VERSION: '1.5.0'
+  AWS_REGION: ${{ vars.TF_AWS_REGION || 'mexico-central-1' }}
+
+jobs:
+  terraform:
+    name: Terraform ${{ github.event.inputs.action || 'plan' }}
+    runs-on: ubuntu-latest
+
+    permissions:
+      id-token: write
+      contents: read
+      pull-requests: write
+
+    defaults:
+      run:
+        working-directory: terraform
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # Bootstrap: Use IAM User if OIDC Role doesn't exist yet
+      - name: Configure AWS credentials (IAM User - Bootstrap)
+        if: secrets.TF_AWS_ROLE_ARN == ''
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.TF_AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.TF_AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      # Production: Use OIDC Role (more secure)
+      - name: Configure AWS credentials (OIDC)
+        if: secrets.TF_AWS_ROLE_ARN != ''
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.TF_AWS_ROLE_ARN }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: ${{ env.TF_VERSION }}
+
+      - name: Create backend configuration
+        run: |
+          cat > backend.hcl <<EOF
+          bucket         = "${{ secrets.TF_STATE_BUCKET }}"
+          key            = "${{ vars.TF_STATE_KEY || 'portfolio/terraform.tfstate' }}"
+          region         = "${{ env.AWS_REGION }}"
+          encrypt        = true
+          dynamodb_table = "${{ secrets.TF_STATE_LOCK_TABLE }}"
+          EOF
+
+          echo "Backend configuration created:"
+          cat backend.hcl
+
+      - name: Create terraform.tfvars
+        run: |
+          cat > terraform.tfvars <<EOF
+          # Required variables
+          domain_name = "${{ secrets.TF_DOMAIN_NAME }}"
+
+          # Optional variables
+          project_name = "${{ vars.TF_PROJECT_NAME || 'sre-portfolio' }}"
+          aws_region   = "${{ env.AWS_REGION }}"
+          environment  = "${{ vars.TF_ENVIRONMENT || 'production' }}"
+
+          # Route53 configuration
+          create_dns_records = ${{ vars.TF_CREATE_DNS_RECORDS || 'false' }}
+          route53_zone_id    = "${{ secrets.TF_ROUTE53_ZONE_ID || '' }}"
+
+          # Additional tags
+          tags = {
+            Owner      = "${{ vars.TF_OWNER || 'DevOps Team' }}"
+            Purpose    = "${{ vars.TF_PURPOSE || 'Personal Portfolio' }}"
+            ManagedBy  = "terraform"
+            Repository = "${{ github.repository }}"
+          }
+          EOF
+
+          echo "Terraform variables created (domain redacted for security)"
+
+      - name: Terraform Format Check
+        id: fmt
+        run: terraform fmt -check -recursive
+        continue-on-error: true
+
+      - name: Terraform Init
+        id: init
+        run: terraform init -backend-config=backend.hcl
+
+      - name: Terraform Validate
+        id: validate
+        run: terraform validate -no-color
+
+      - name: Terraform Plan
+        id: plan
+        if: github.event.inputs.action == 'plan' || github.event.inputs.action == 'apply' || github.event_name == 'push'
+        run: |
+          terraform plan -no-color -out=tfplan
+        continue-on-error: false
+
+      - name: Save Plan Output
+        if: steps.plan.outcome == 'success'
+        run: |
+          terraform show -no-color tfplan > plan_output.txt
+          echo "Plan saved to plan_output.txt"
+
+      - name: Upload Plan Artifact
+        if: steps.plan.outcome == 'success'
+        uses: actions/upload-artifact@v4
+        with:
+          name: terraform-plan
+          path: terraform/tfplan
+          retention-days: 7
+
+      - name: Comment PR with Plan
+        if: github.event_name == 'pull_request' && steps.plan.outcome == 'success'
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const fs = require('fs');
+            const plan = fs.readFileSync('terraform/plan_output.txt', 'utf8');
+            const output = `#### Terraform Format and Style 🖌 \`${{ steps.fmt.outcome }}\`
+            #### Terraform Initialization ⚙️ \`${{ steps.init.outcome }}\`
+            #### Terraform Validation 🤖 \`${{ steps.validate.outcome }}\`
+            #### Terraform Plan 📖 \`${{ steps.plan.outcome }}\`
+
+            <details><summary>Show Plan</summary>
+
+            \`\`\`terraform
+            ${plan.substring(0, 65000)}
+            \`\`\`
+
+            </details>
+
+            *Pusher: @${{ github.actor }}, Action: \`${{ github.event_name }}\`*`;
+
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: output
+            });
+
+      - name: Terraform Apply
+        id: apply
+        if: |
+          github.event.inputs.action == 'apply' &&
+          (github.event.inputs.auto_approve == 'true' || github.ref == 'refs/heads/main')
+        run: terraform apply -auto-approve tfplan
+
+      - name: Terraform Destroy Plan
+        id: destroy_plan
+        if: github.event.inputs.action == 'destroy'
+        run: terraform plan -destroy -no-color -out=destroy_tfplan
+
+      - name: Terraform Destroy
+        id: destroy
+        if: |
+          github.event.inputs.action == 'destroy' &&
+          github.event.inputs.auto_approve == 'true'
+        run: terraform apply -auto-approve destroy_tfplan
+
+      - name: Terraform Output
+        id: output
+        if: steps.apply.outcome == 'success'
+        run: |
+          echo "## Terraform Outputs" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+          terraform output >> $GITHUB_STEP_SUMMARY
+          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+
+          echo "### GitHub Secrets Summary" >> $GITHUB_STEP_SUMMARY
+          terraform output -raw github_secrets_summary >> $GITHUB_STEP_SUMMARY
+
+      - name: Save Infrastructure Outputs
+        if: steps.apply.outcome == 'success'
+        run: |
+          mkdir -p ../outputs
+          terraform output -json > ../outputs/terraform-outputs.json
+          terraform output s3_bucket_name > ../outputs/s3-bucket-name.txt
+          terraform output cloudfront_distribution_id > ../outputs/cloudfront-distribution-id.txt
+          echo "Outputs saved to outputs/ directory"
+
+      - name: Upload Infrastructure Outputs
+        if: steps.apply.outcome == 'success'
+        uses: actions/upload-artifact@v4
+        with:
+          name: terraform-outputs
+          path: outputs/
+          retention-days: 90
+
+      - name: Deployment Summary
+        if: always()
+        run: |
+          echo "## Terraform Execution Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Action:** ${{ github.event.inputs.action || 'plan' }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Region:** ${{ env.AWS_REGION }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Environment:** ${{ vars.TF_ENVIRONMENT || 'production' }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Step Results" >> $GITHUB_STEP_SUMMARY
+          echo "- Format Check: ${{ steps.fmt.outcome }}" >> $GITHUB_STEP_SUMMARY
+          echo "- Initialization: ${{ steps.init.outcome }}" >> $GITHUB_STEP_SUMMARY
+          echo "- Validation: ${{ steps.validate.outcome }}" >> $GITHUB_STEP_SUMMARY
+          echo "- Plan: ${{ steps.plan.outcome }}" >> $GITHUB_STEP_SUMMARY
+          if [[ "${{ steps.apply.outcome }}" != "" ]]; then
+            echo "- Apply: ${{ steps.apply.outcome }}" >> $GITHUB_STEP_SUMMARY
+          fi
+          if [[ "${{ steps.destroy.outcome }}" != "" ]]; then
+            echo "- Destroy: ${{ steps.destroy.outcome }}" >> $GITHUB_STEP_SUMMARY
+          fi
+
+      - name: Cleanup
+        if: always()
+        run: |
+          rm -f backend.hcl terraform.tfvars tfplan destroy_tfplan plan_output.txt
+          echo "Cleaned up sensitive files"
