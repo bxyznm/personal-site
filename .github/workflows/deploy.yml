@@ -74,7 +74,7 @@ jobs:
       - name: Configure AWS credentials (OIDC)
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: arn:aws:iam::060795926773:user/github-actions-terraform
+          role-to-assume: arn:aws:iam::060795926773:role/my-portfolio-github-actions
           aws-region: ${{ env.AWS_REGION }}
 
       - name: Sync static assets to S3 (long cache)
