@@ -49,19 +49,19 @@ jobs:
 
       # Bootstrap: Use IAM User if OIDC Role doesn't exist yet
       - name: Configure AWS credentials (IAM User - Bootstrap)
-        if: secret.TF_AWS_ROLE_ARN == ''
+        if: secrets.TF_AWS_ROLE_ARN == ''
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          aws-access-key-id: ${{ secret.TF_AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secret.TF_AWS_SECRET_ACCESS_KEY }}
+          aws-access-key-id: ${{ secrets.TF_AWS_ACCESS_KEY_ID }}
+          aws-secrets-access-key: ${{ secrets.TF_AWS_secrets_ACCESS_KEY }}
           aws-region: ${{ env.AWS_REGION }}
 
       # Production: Use OIDC Role (more secure)
       - name: Configure AWS credentials (OIDC)
-        if: secret.TF_AWS_ROLE_ARN != ''
+        if: secrets.TF_AWS_ROLE_ARN != ''
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: ${{ secret.TF_AWS_ROLE_ARN }}
+          role-to-assume: ${{ secrets.TF_AWS_ROLE_ARN }}
           aws-region: ${{ env.AWS_REGION }}
 
       - name: Setup Terraform
@@ -72,11 +72,11 @@ jobs:
       - name: Create backend configuration
         run: |
           cat > backend.hcl <<EOF
-          bucket         = "${{ secret.TF_STATE_BUCKET }}"
+          bucket         = "${{ secrets.TF_STATE_BUCKET }}"
           key            = "${{ vars.TF_STATE_KEY || 'portfolio/terraform.tfstate' }}"
           region         = "${{ env.AWS_REGION }}"
           encrypt        = true
-          dynamodb_table = "${{ secret.TF_STATE_LOCK_TABLE }}"
+          dynamodb_table = "${{ secrets.TF_STATE_LOCK_TABLE }}"
           EOF
 
           echo "Backend configuration created:"
@@ -86,7 +86,7 @@ jobs:
         run: |
           cat > terraform.tfvars <<EOF
           # Required variables
-          domain_name = "${{ secret.TF_DOMAIN_NAME }}"
+          domain_name = "${{ secrets.TF_DOMAIN_NAME }}"
 
           # Optional variables
           project_name = "${{ vars.TF_PROJECT_NAME || 'sre-portfolio' }}"
@@ -95,7 +95,7 @@ jobs:
 
           # Route53 configuration
           create_dns_records = ${{ vars.TF_CREATE_DNS_RECORDS || 'false' }}
-          route53_zone_id    = "${{ secret.TF_ROUTE53_ZONE_ID || '' }}"
+          route53_zone_id    = "${{ secrets.TF_ROUTE53_ZONE_ID || '' }}"
 
           # Additional tags
           tags = {
@@ -146,7 +146,7 @@ jobs:
         if: github.event_name == 'pull_request' && steps.plan.outcome == 'success'
         uses: actions/github-script@v7
         with:
-          github-token: ${{ secret.GITHUB_TOKEN }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             const fs = require('fs');
             const plan = fs.readFileSync('terraform/plan_output.txt', 'utf8');
@@ -201,8 +201,8 @@ jobs:
           terraform output >> $GITHUB_STEP_SUMMARY
           echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
 
-          echo "### GitHub secret Summary" >> $GITHUB_STEP_SUMMARY
-          terraform output -raw github_secret_summary >> $GITHUB_STEP_SUMMARY
+          echo "### GitHub secrets Summary" >> $GITHUB_STEP_SUMMARY
+          terraform output -raw github_secrets_summary >> $GITHUB_STEP_SUMMARY
 
       - name: Save Infrastructure Outputs
         if: steps.apply.outcome == 'success'
