@@ -15,7 +15,7 @@ terraform {
   backend "s3" {
     bucket         = "060795926773-personal-site-tfstate"
     key            = "portfolio/terraform.tfstate"
-    region         = "mexico-central-1"
+    region         = "mx-central-1"
     encrypt        = true
     dynamodb_table = "terraform-locks"
   }
