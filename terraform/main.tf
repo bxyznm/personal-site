@@ -13,9 +13,9 @@ terraform {
   # For local development, uncomment and configure:
   
   backend "s3" {
-    bucket         = "060795926773-personal-site-tfstate"
+    bucket         = "060795926773-personal-site-tfstate-us-east-1"
     key            = "portfolio/terraform.tfstate"
-    region         = "mx-central-1"
+    region         = "us-east-1"
     encrypt        = true
     dynamodb_table = "terraform-locks"
   }
@@ -24,14 +24,14 @@ terraform {
   # (Create backend.hcl with your values - it's in .gitignore)
 }
 
-# provider "aws" {
-#   region = var.aws_region
-#   skip_region_validation   = true
+provider "aws" {
+  region = var.aws_region
+  
 
-#   default_tags {
-#     tags = local.common_tags
-#   }
-# }
+  default_tags {
+    tags = local.common_tags
+  }
+}
 
 # ACM certificate must be in us-east-1 for CloudFront
 provider "aws" {
