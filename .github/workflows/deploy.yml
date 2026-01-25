@@ -4,7 +4,6 @@ on:
   workflow_dispatch:
 
 env:
-  NODE_VERSION: '25.4.0'
   AWS_REGION: us-east-1
 
 jobs:
@@ -16,11 +15,11 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: ${{ env.NODE_VERSION }}
+          node-version: 20
           cache: npm
 
       - name: Install dependencies
-        run: npm install
+        run: npm ci
 
       - name: Run ESLint
         run: npm run lint
@@ -37,11 +36,11 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
           cache: npm
       
-      - name: Versionin
+      - name: Version bump
         run: npm run version:minor
-        
+
       - name: Install dependencies
-        run: npm install
+        run: npm ci
 
       - name: Build
         run: npm run build
@@ -75,7 +74,7 @@ jobs:
       - name: Configure AWS credentials (OIDC)
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: arn:aws:iam::060795926773:role/my-portfolio-github-actions
+          role-to-assume: arn:aws:iam::060795926773:user/github-actions-terraform
           aws-region: ${{ env.AWS_REGION }}
 
       - name: Sync static assets to S3 (long cache)
