@@ -33,15 +33,34 @@ resource "aws_route53_record" "certificate_validation" {
   zone_id         = var.route53_zone_id
 }
 
-# Certificate validation
-resource "aws_acm_certificate_validation" "website" {
+# Certificate validation (with Route53)
+resource "aws_acm_certificate_validation" "website_route53" {
+  count    = var.create_dns_records ? 1 : 0
   provider = aws.us_east_1
 
   certificate_arn         = aws_acm_certificate.website.arn
-  validation_record_fqdns = var.create_dns_records ? [for record in aws_route53_record.certificate_validation : record.fqdn] : []
+  validation_record_fqdns = [for record in aws_route53_record.certificate_validation : record.fqdn]
 
-  # If not using Route53, validation must be done manually
+  timeouts {
+    create = "45m"
+  }
+}
+
+# Certificate validation (manual DNS - no Route53)
+resource "aws_acm_certificate_validation" "website_manual" {
+  count    = var.create_dns_records ? 0 : 1
+  provider = aws.us_east_1
+
+  certificate_arn = aws_acm_certificate.website.arn
+
+  # For manual validation, don't specify validation_record_fqdns
+  # Add DNS records manually from the certificate's domain_validation_options
+
+  timeouts {
+    create = "60m" # Longer timeout for manual validation
+  }
+
   lifecycle {
-    ignore_changes = var.create_dns_records ? [] : [validation_record_fqdns]
+    ignore_changes = [validation_record_fqdns]
   }
 }
