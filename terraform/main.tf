@@ -24,14 +24,14 @@ terraform {
   # (Create backend.hcl with your values - it's in .gitignore)
 }
 
-# provider "aws" {
-#   region = var.aws_region
-#   skip_region_validation   = true
+provider "aws" {
+  region = var.aws_region
+  skip_region_validation   = true
 
-#   default_tags {
-#     tags = local.common_tags
-#   }
-# }
+  default_tags {
+    tags = local.common_tags
+  }
+}
 
 # ACM certificate must be in us-east-1 for CloudFront
 provider "aws" {
