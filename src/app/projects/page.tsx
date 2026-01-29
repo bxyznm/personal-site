@@ -33,7 +33,7 @@ export default function Projects() {
               Check back soon or take a look at my GitHub in the meantime.
             </p>
             <a
-              href="https://github.com/bxyzn"
+              href="https://github.com/bxyznm"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center space-x-2 mt-6 px-6 py-3 bg-accent-primary text-bg-primary font-mono font-semibold rounded-lg hover:bg-accent-secondary transition-colors"

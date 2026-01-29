@@ -1,184 +1,197 @@
 # SRE/DevOps Portfolio Website
 
-A personal portfolio website built with Next.js 14, featuring a dark mode terminal-inspired design, MDX blog, and automated deployment to AWS via GitHub Actions.
+A personal portfolio website showcasing SRE/DevOps expertise, built with Next.js 14 and deployed to AWS with full infrastructure as code.
 
-## Tech Stack
-
-| Component | Technology |
-|-----------|------------|
-| Framework | Next.js 14 (App Router) |
-| Styling | Tailwind CSS |
-| Blog | MDX |
-| Hosting | AWS S3 + CloudFront |
-| CI/CD | GitHub Actions |
-| IaC | Terraform |
+**Live Demo**: [https://bxyzn.com](https://bxyzn.com)
 
 ## Features
 
-- Dark mode with cyan/blue terminal-inspired theme
-- Responsive design
-- MDX-powered blog with syntax highlighting
-- Static site generation for optimal performance
-- Automated deployment pipeline
-- Infrastructure as Code with Terraform
+- **Static Site Generation** - Lightning-fast performance with Next.js App Router
+- **MDX Blog** - Write blog posts in Markdown with React components
+- **Terminal-Inspired Design** - Dark mode with cyan/blue accents
+- **AWS Infrastructure** - S3 + CloudFront CDN with SSL/TLS
+- **CI/CD Pipeline** - Automated deployment with GitHub Actions
+- **Infrastructure as Code** - Complete Terraform configuration
+
+## Tech Stack
+
+| Layer | Technology |
+|-------|-----------|
+| **Framework** | Next.js 14 (App Router, Static Export) |
+| **Styling** | Tailwind CSS |
+| **Blog** | MDX with frontmatter |
+| **Hosting** | AWS S3 + CloudFront |
+| **SSL/TLS** | AWS Certificate Manager |
+| **DNS** | AWS Route53 (optional) |
+| **CI/CD** | GitHub Actions |
+| **IaC** | Terraform |
+
+## Quick Start
+
+### Local Development
+
+```bash
+# Install dependencies
+npm install
+
+# Start development server
+npm run dev
+
+# Open http://localhost:3000
+```
+
+### Deployment
+
+```bash
+# Deploy infrastructure
+cd terraform
+terraform init
+terraform apply
+
+# Configure GitHub secrets (see Deployment Guide)
+# Push to main branch for automatic deployment
+git push origin main
+```
+
+## Documentation
+
+- **[Development Guide](docs/DEVELOPMENT.md)** - Local development, customization, coding standards
+- **[Deployment Guide](docs/DEPLOYMENT.md)** - Step-by-step deployment to AWS
+- **[Infrastructure Guide](docs/INFRASTRUCTURE.md)** - AWS architecture, Terraform details
+- **[Troubleshooting](docs/TROUBLESHOOTING.md)** - Common issues and solutions
 
 ## Project Structure
 
 ```
-├── .github/workflows/    # GitHub Actions CI/CD
-├── content/blog/         # MDX blog posts
-├── public/               # Static assets
+├── .github/workflows/    # CI/CD pipelines
+│   ├── deploy.yml       # Build and deploy to AWS
+│   └── terraform.yml    # Infrastructure management
+├── content/blog/        # MDX blog posts
+├── docs/               # Documentation
+├── public/             # Static assets
 ├── src/
-│   ├── app/             # Next.js App Router pages
-│   ├── components/      # React components
-│   └── lib/             # Utilities (MDX helpers)
-└── terraform/           # AWS infrastructure
+│   ├── app/           # Next.js App Router pages
+│   ├── components/    # React components
+│   └── lib/          # Utilities (MDX processing)
+├── terraform/         # Infrastructure as Code
+└── CLAUDE.md         # AI assistant instructions
 ```
 
-## Getting Started
-
-### Prerequisites
-
-- Node.js 20+
-- npm or yarn
-- AWS CLI (for deployment)
-- Terraform 1.5+ (for infrastructure)
-
-### Local Development
-
-1. Install dependencies:
-   ```bash
-   npm install
-   ```
-
-2. Start the development server:
-   ```bash
-   npm run dev
-   ```
-
-3. Open [http://localhost:3000](http://localhost:3000)
-
-### Building for Production
+## Key Commands
 
 ```bash
-npm run build
+# Development
+npm run dev              # Start dev server
+npm run build            # Build static site
+npm run lint             # Lint code
+
+# Versioning (used in CI/CD)
+npm run version:patch    # 1.0.0 → 1.0.1
+npm run version:minor    # 1.0.0 → 1.1.0
+npm run version:major    # 1.0.0 → 2.0.0
+
+# Terraform
+cd terraform
+terraform init          # Initialize
+terraform plan          # Preview changes
+terraform apply         # Apply infrastructure
+terraform output        # View outputs
 ```
 
-This generates a static export in the `out/` directory.
+## Blog System
 
-## Blog Posts
-
-Blog posts are written in MDX format and stored in `content/blog/`. Each post requires frontmatter:
+Write blog posts in MDX format in `content/blog/`:
 
 ```mdx
 ---
-title: "Your Post Title"
-date: "2024-01-15"
-excerpt: "Brief description of the post"
-tags: ["Tag1", "Tag2"]
+title: "Post Title"
+date: "2024-01-28"
+excerpt: "Brief description"
+tags: ["tag1", "tag2"]
 ---
 
-Your content here...
+## Your Content
+
+Write in **Markdown** with React components!
 ```
 
-## Deployment
-
-### AWS Infrastructure Setup
-
-1. Navigate to the terraform directory:
-   ```bash
-   cd terraform
-   ```
-
-2. Copy the example variables file:
-   ```bash
-   cp terraform.tfvars.example terraform.tfvars
-   ```
-
-3. Edit `terraform.tfvars` with your domain and preferences
-
-4. Initialize Terraform:
-   ```bash
-   terraform init
-   ```
-
-5. Review the plan:
-   ```bash
-   terraform plan
-   ```
-
-6. Apply the infrastructure:
-   ```bash
-   terraform apply
-   ```
-
-7. Get the outputs for GitHub secrets:
-   ```bash
-   terraform output github_secrets_summary
-   terraform output -raw cicd_access_key_id
-   terraform output -raw cicd_secret_access_key
-   ```
-
-### GitHub Repository Setup
-
-Add the following secrets to your GitHub repository:
-
-| Secret | Description |
-|--------|-------------|
-| `AWS_ACCESS_KEY_ID` | IAM user access key |
-| `AWS_SECRET_ACCESS_KEY` | IAM user secret key |
-| `AWS_S3_BUCKET` | S3 bucket name |
-| `AWS_CLOUDFRONT_DISTRIBUTION_ID` | CloudFront distribution ID |
-
-Add the following variables:
-
-| Variable | Description |
-|----------|-------------|
-| `AWS_REGION` | AWS region (e.g., `us-east-1`) |
-| `DOMAIN_NAME` | Your domain name |
-
-### SSL Certificate Validation
-
-If not using Route53, manually add the DNS validation records shown in:
-```bash
-terraform output dns_configuration
-```
-
-### Deploying
-
-Push to the `main` branch to trigger automatic deployment:
-
-```bash
-git push origin main
-```
+See [Development Guide](docs/DEVELOPMENT.md#adding-blog-posts) for details.
 
 ## Customization
 
-### Personal Information
+Update personal information in:
+- [src/app/page.tsx](src/app/page.tsx) - Home page
+- [src/app/about/page.tsx](src/app/about/page.tsx) - About and skills
+- [src/app/projects/page.tsx](src/app/projects/page.tsx) - Projects
+- [src/app/contact/page.tsx](src/app/contact/page.tsx) - Contact info
+- [src/components/Footer.tsx](src/components/Footer.tsx) - Social links
 
-Update these files with your information:
-- `src/app/page.tsx` - Home page content
-- `src/app/about/page.tsx` - About page and skills
-- `src/app/projects/page.tsx` - Your projects
-- `src/app/contact/page.tsx` - Contact information
-- `src/components/Footer.tsx` - Social links
-
-### Theme Colors
-
-Edit the color palette in `tailwind.config.js`:
+Edit theme in [tailwind.config.js](tailwind.config.js):
 
 ```javascript
 colors: {
-  'bg-primary': '#0a0f1a',
-  'accent-primary': '#06b6d4',
-  // ...
+  'bg-primary': '#0a0f1a',       // Main background
+  'accent-primary': '#06b6d4',   // Accent color (cyan)
+  'text-primary': '#f1f5f9',     // Text color
 }
 ```
+
+## Architecture
+
+```
+┌──────────┐     ┌──────────────┐     ┌─────────┐
+│  GitHub  │────→│   GitHub     │────→│   S3    │
+│  (Code)  │     │   Actions    │     │ (Static)│
+└──────────┘     └──────────────┘     └────┬────┘
+                                            │
+                                            ↓
+                                     ┌─────────────┐
+                                     │ CloudFront  │
+                                     │    (CDN)    │
+                                     └──────┬──────┘
+                                            │
+                                            ↓
+                                      ┌──────────┐
+                                      │ Route53  │
+                                      │  (DNS)   │
+                                      └──────────┘
+```
+
+**Deployment Flow**:
+1. Push to `main` → GitHub Actions triggered
+2. Build static site → Upload to S3
+3. Invalidate CloudFront cache
+4. Site updates globally within minutes
+
+See [Infrastructure Guide](docs/INFRASTRUCTURE.md) for AWS resource details.
+
+## Costs
+
+Estimated monthly AWS costs (after free tier):
+
+| Service | Usage | Cost |
+|---------|-------|------|
+| S3 | 1GB storage, 10K requests | $0.05 |
+| CloudFront | 10GB transfer, 100K requests | $1.00 |
+| Route53 | 1 hosted zone | $0.50 |
+| ACM | SSL certificate | **FREE** |
+| **Total** | | **~$1.55/month** |
 
 ## License
 
 MIT
 
+## Author
+
+**Bryan Mendoza**
+- Portfolio: [https://bxyzn.com](https://bxyzn.com)
+- GitHub: [@bxyznm](https://github.com/bxyznm)
+
+## Support
+
+- **Documentation**: [docs/](docs/)
+- **Issues**: [GitHub Issues](https://github.com/bxyznm/personal-site/issues)
+
 ---
 
-Built with Next.js and deployed on AWS
+**Built with Next.js • Deployed on AWS • Infrastructure as Code with Terraform**

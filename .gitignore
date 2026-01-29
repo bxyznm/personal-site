@@ -62,3 +62,6 @@ outputs/
 
 # OS
 Thumbs.db
+
+# agents
+.claude/
