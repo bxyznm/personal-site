@@ -15,6 +15,7 @@ resource "aws_cloudfront_distribution" "website" {
   comment             = "${var.project_name} website distribution"
   price_class         = "PriceClass_100" # Use PriceClass_All for global distribution
   aliases             = [var.domain_name, "www.${var.domain_name}"]
+  web_acl_id          = "arn:aws:wafv2:us-east-1:060795926773:global/webacl/CreatedByCloudFront-87d3d181/13df52d7-d026-4aeb-b786-6f7ebd29b418"
 
   origin {
     domain_name              = aws_s3_bucket.website.bucket_regional_domain_name
