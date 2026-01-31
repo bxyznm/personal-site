@@ -1,18 +1,31 @@
-# Dependencies
-/node_modules
-/.pnp
+# Frontend Dependencies
+/frontend/node_modules
+/frontend/.pnp
 .pnp.js
 .yarn/install-state.gz
 
-# Testing
-/coverage
+# Frontend Testing
+/frontend/coverage
 
-# Next.js
-/.next/
-/out/
+# Frontend Next.js
+/frontend/.next/
+/frontend/out/
 
-# Production
-/build
+# Frontend Production
+/frontend/build
+
+# Backend Python
+/backend/**/__pycache__/
+/backend/**/*.pyc
+/backend/**/*.pyo
+/backend/**/*.pyd
+/backend/.pytest_cache
+/backend/venv/
+/backend/env/
+/backend/.venv/
+/backend/dist/
+/backend/package/
+/backend/*.egg-info/
 
 # Misc
 .DS_Store
@@ -26,6 +39,8 @@ yarn-error.log*
 # Local env files
 .env*.local
 .env
+/frontend/.env*.local
+/backend/.env
 
 # Vercel
 .vercel
@@ -65,3 +80,12 @@ Thumbs.db
 
 # agents
 .claude/
+.next/
+node_modules/
+dist/
+build/
+.cache/
+.out/
+logs/
+*.log
+npm/
