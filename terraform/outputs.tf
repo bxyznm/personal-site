@@ -70,7 +70,7 @@ output "github_secrets_summary" {
     AWS_SECRET_ACCESS_KEY: (run 'terraform output -raw cicd_secret_access_key')
     AWS_S3_BUCKET: ${aws_s3_bucket.website.id}
     AWS_CLOUDFRONT_DISTRIBUTION_ID: ${aws_cloudfront_distribution.website.id}
-    CONTACT_API_URL: ${aws_apigatewayv2_stage.contact.invoke_url}/contact
+    CONTACT_API_URL: ${trimsuffix(aws_apigatewayv2_stage.contact.invoke_url, "/")}/contact
 
     Add these variables to your GitHub repository:
     ============================================
@@ -84,7 +84,7 @@ output "github_secrets_summary" {
 # Contact Form API
 output "contact_api_url" {
   description = "Contact form API endpoint URL — set this as CONTACT_API_URL in GitHub secrets"
-  value       = "${aws_apigatewayv2_stage.contact.invoke_url}/contact"
+  value       = "${trimsuffix(aws_apigatewayv2_stage.contact.invoke_url, "/")}/contact"
 }
 
 # DNS Configuration (if not using Route53)
