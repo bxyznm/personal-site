@@ -68,7 +68,7 @@ export default function Home() {
                   <FiGithub className="w-5 h-5" />
                 </a>
                 <a
-                  href="https://linkedin.com/bxyzn"
+                  href="https://www.linkedin.com/in/brxvn"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="p-3 bg-bg-card text-text-secondary hover:text-accent-primary hover:border-accent-primary border border-bg-card rounded-lg transition-colors"

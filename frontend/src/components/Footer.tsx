@@ -1,8 +1,8 @@
 import { FiGithub, FiLinkedin, FiTwitter, FiMail, FiHeart } from 'react-icons/fi'
 
 const socialLinks = [
-  { name: 'GitHub', href: 'https://github.com', icon: FiGithub },
-  { name: 'LinkedIn', href: 'https://linkedin.com', icon: FiLinkedin },
+  { name: 'GitHub', href: 'https://github.com/bxyznm', icon: FiGithub },
+  { name: 'LinkedIn', href: 'https://www.linkedin.com/in/brxvn', icon: FiLinkedin },
   // { name: 'Twitter', href: 'https://twitter.com', icon: FiTwitter },
   { name: 'Email', href: 'mailto:bryangonzalezm@outlook.com', icon: FiMail },
 ]
