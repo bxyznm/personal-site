@@ -1,4 +1,7 @@
-import { FiMail, FiGithub, FiLinkedin, FiTwitter, FiMapPin, FiSend } from 'react-icons/fi'
+'use client'
+
+import { useState, FormEvent } from 'react'
+import { FiMail, FiGithub, FiLinkedin, FiMapPin, FiSend, FiCheck, FiAlertCircle } from 'react-icons/fi'
 
 const contactMethods = [
   {
@@ -24,7 +27,53 @@ const contactMethods = [
   },
 ]
 
+type FormState = 'idle' | 'loading' | 'success' | 'error'
+
 export default function Contact() {
+  const [formState, setFormState] = useState<FormState>('idle')
+  const [errorMessage, setErrorMessage] = useState('')
+
+  async function handleSubmit(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault()
+    setFormState('loading')
+    setErrorMessage('')
+
+    const apiUrl = process.env.NEXT_PUBLIC_CONTACT_API_URL
+    if (!apiUrl) {
+      setErrorMessage('Contact form is not configured. Please reach out directly by email.')
+      setFormState('error')
+      return
+    }
+
+    const form = e.currentTarget
+    const data = {
+      name: (form.elements.namedItem('name') as HTMLInputElement).value,
+      email: (form.elements.namedItem('email') as HTMLInputElement).value,
+      subject: (form.elements.namedItem('subject') as HTMLInputElement).value,
+      message: (form.elements.namedItem('message') as HTMLTextAreaElement).value,
+    }
+
+    try {
+      const res = await fetch(apiUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      })
+
+      if (res.ok) {
+        setFormState('success')
+        form.reset()
+      } else {
+        const body = await res.json().catch(() => ({}))
+        setErrorMessage(body.error || 'Something went wrong. Please try again.')
+        setFormState('error')
+      }
+    } catch {
+      setErrorMessage('Network error. Please check your connection and try again.')
+      setFormState('error')
+    }
+  }
+
   return (
     <div className="min-h-screen py-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -44,72 +93,98 @@ export default function Contact() {
             <h2 className="text-xl font-mono font-semibold mb-6">
               <span className="text-accent-primary">$</span> send_message
             </h2>
-            <form className="space-y-6">
-              <div>
-                <label htmlFor="name" className="block text-sm font-mono text-text-secondary mb-2">
-                  Name
-                </label>
-                <input
-                  type="text"
-                  id="name"
-                  name="name"
-                  className="w-full px-4 py-3 bg-bg-secondary border border-bg-card rounded-lg text-text-primary placeholder-text-muted focus:border-accent-primary focus:outline-none focus:ring-1 focus:ring-accent-primary transition-colors font-mono"
-                  placeholder="John Doe"
-                />
+
+            {formState === 'success' ? (
+              <div className="flex flex-col items-center justify-center py-12 space-y-4 text-center">
+                <div className="p-4 bg-green-500/10 rounded-full">
+                  <FiCheck className="w-8 h-8 text-green-400" />
+                </div>
+                <p className="text-text-primary font-mono font-semibold">Message sent!</p>
+                <p className="text-text-secondary text-sm">
+                  I&apos;ll get back to you within 24–48 hours.
+                </p>
+                <button
+                  onClick={() => setFormState('idle')}
+                  className="mt-4 text-sm text-accent-primary hover:text-accent-secondary font-mono underline underline-offset-4"
+                >
+                  Send another message
+                </button>
               </div>
+            ) : (
+              <form className="space-y-6" onSubmit={handleSubmit}>
+                <div>
+                  <label htmlFor="name" className="block text-sm font-mono text-text-secondary mb-2">
+                    Name
+                  </label>
+                  <input
+                    type="text"
+                    id="name"
+                    name="name"
+                    required
+                    className="w-full px-4 py-3 bg-bg-secondary border border-bg-card rounded-lg text-text-primary placeholder-text-muted focus:border-accent-primary focus:outline-none focus:ring-1 focus:ring-accent-primary transition-colors font-mono"
+                    placeholder="John Doe"
+                  />
+                </div>
 
-              <div>
-                <label htmlFor="email" className="block text-sm font-mono text-text-secondary mb-2">
-                  Email
-                </label>
-                <input
-                  type="email"
-                  id="email"
-                  name="email"
-                  className="w-full px-4 py-3 bg-bg-secondary border border-bg-card rounded-lg text-text-primary placeholder-text-muted focus:border-accent-primary focus:outline-none focus:ring-1 focus:ring-accent-primary transition-colors font-mono"
-                  placeholder="john@example.com"
-                />
-              </div>
+                <div>
+                  <label htmlFor="email" className="block text-sm font-mono text-text-secondary mb-2">
+                    Email
+                  </label>
+                  <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    required
+                    className="w-full px-4 py-3 bg-bg-secondary border border-bg-card rounded-lg text-text-primary placeholder-text-muted focus:border-accent-primary focus:outline-none focus:ring-1 focus:ring-accent-primary transition-colors font-mono"
+                    placeholder="john@example.com"
+                  />
+                </div>
 
-              <div>
-                <label htmlFor="subject" className="block text-sm font-mono text-text-secondary mb-2">
-                  Subject
-                </label>
-                <input
-                  type="text"
-                  id="subject"
-                  name="subject"
-                  className="w-full px-4 py-3 bg-bg-secondary border border-bg-card rounded-lg text-text-primary placeholder-text-muted focus:border-accent-primary focus:outline-none focus:ring-1 focus:ring-accent-primary transition-colors font-mono"
-                  placeholder="Project Collaboration"
-                />
-              </div>
+                <div>
+                  <label htmlFor="subject" className="block text-sm font-mono text-text-secondary mb-2">
+                    Subject
+                  </label>
+                  <input
+                    type="text"
+                    id="subject"
+                    name="subject"
+                    required
+                    className="w-full px-4 py-3 bg-bg-secondary border border-bg-card rounded-lg text-text-primary placeholder-text-muted focus:border-accent-primary focus:outline-none focus:ring-1 focus:ring-accent-primary transition-colors font-mono"
+                    placeholder="Project Collaboration"
+                  />
+                </div>
 
-              <div>
-                <label htmlFor="message" className="block text-sm font-mono text-text-secondary mb-2">
-                  Message
-                </label>
-                <textarea
-                  id="message"
-                  name="message"
-                  rows={5}
-                  className="w-full px-4 py-3 bg-bg-secondary border border-bg-card rounded-lg text-text-primary placeholder-text-muted focus:border-accent-primary focus:outline-none focus:ring-1 focus:ring-accent-primary transition-colors font-mono resize-none"
-                  placeholder="Tell me about your project..."
-                ></textarea>
-              </div>
+                <div>
+                  <label htmlFor="message" className="block text-sm font-mono text-text-secondary mb-2">
+                    Message
+                  </label>
+                  <textarea
+                    id="message"
+                    name="message"
+                    rows={5}
+                    required
+                    className="w-full px-4 py-3 bg-bg-secondary border border-bg-card rounded-lg text-text-primary placeholder-text-muted focus:border-accent-primary focus:outline-none focus:ring-1 focus:ring-accent-primary transition-colors font-mono resize-none"
+                    placeholder="Tell me about your project..."
+                  ></textarea>
+                </div>
 
-              <button
-                type="submit"
-                className="w-full flex items-center justify-center space-x-2 px-6 py-3 bg-accent-primary text-bg-primary font-mono font-semibold rounded-lg hover:bg-accent-secondary transition-colors glow-effect"
-              >
-                <FiSend className="w-5 h-5" />
-                <span>Send Message</span>
-              </button>
-            </form>
+                {formState === 'error' && (
+                  <div className="flex items-start space-x-2 p-3 bg-red-500/10 border border-red-500/30 rounded-lg text-sm text-red-400">
+                    <FiAlertCircle className="w-4 h-4 mt-0.5 shrink-0" />
+                    <span>{errorMessage}</span>
+                  </div>
+                )}
 
-            {/* <p className="mt-4 text-xs text-text-muted text-center">
-              Note: Form submissions are handled via a serverless function.
-              For static hosting, consider using Formspree or similar services.
-            </p> */}
+                <button
+                  type="submit"
+                  disabled={formState === 'loading'}
+                  className="w-full flex items-center justify-center space-x-2 px-6 py-3 bg-accent-primary text-bg-primary font-mono font-semibold rounded-lg hover:bg-accent-secondary transition-colors glow-effect disabled:opacity-60 disabled:cursor-not-allowed"
+                >
+                  <FiSend className="w-5 h-5" />
+                  <span>{formState === 'loading' ? 'Sending...' : 'Send Message'}</span>
+                </button>
+              </form>
+            )}
           </div>
 
           {/* Contact Info */}

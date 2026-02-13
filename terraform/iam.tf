@@ -84,7 +84,7 @@ data "aws_iam_policy_document" "github_actions_assume_role" {
       test     = "StringLike"
       variable = "token.actions.githubusercontent.com:sub"
       # GitHub repository that can assume this role
-      values   = ["repo:bxyznm/personal-site:*"]
+      values = ["repo:bxyznm/personal-site:*"]
     }
   }
 }

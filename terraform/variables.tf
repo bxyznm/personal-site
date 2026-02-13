@@ -33,6 +33,11 @@ variable "route53_zone_id" {
   default     = ""
 }
 
+variable "contact_email" {
+  description = "Email address for SES identity and contact form notifications"
+  type        = string
+}
+
 variable "tags" {
   description = "Additional tags for resources"
   type        = map(string)

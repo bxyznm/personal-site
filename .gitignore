@@ -67,6 +67,7 @@ terraform/tfplan
 terraform/destroy_tfplan
 terraform/plan_output.txt
 terraform/*.backup
+terraform/lambda/*.zip
 outputs/
 
 # IDE

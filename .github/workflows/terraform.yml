@@ -93,7 +93,8 @@ jobs:
         run: |
           cat > terraform.tfvars <<EOF
           # Required variables
-          domain_name = "${{ secrets.TF_DOMAIN_NAME }}"
+          domain_name   = "${{ secrets.TF_DOMAIN_NAME }}"
+          contact_email = "${{ secrets.TF_CONTACT_EMAIL }}"
 
           # Optional variables
           project_name = "${{ vars.TF_PROJECT_NAME || 'sre-portfolio' }}"
