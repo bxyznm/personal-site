@@ -64,7 +64,7 @@ resource "aws_lambda_function" "contact" {
     variables = {
       SENDER_EMAIL    = var.contact_email
       RECIPIENT_EMAIL = var.contact_email
-      ALLOWED_ORIGIN  = "https://${var.domain_name}"
+      ALLOWED_ORIGIN  = "*"
     }
   }
 
@@ -77,7 +77,7 @@ resource "aws_apigatewayv2_api" "contact" {
   protocol_type = "HTTP"
 
   cors_configuration {
-    allow_origins = ["https://${var.domain_name}", "http://localhost:3000"]
+    allow_origins = ["*"]
     allow_methods = ["POST", "OPTIONS"]
     allow_headers = ["Content-Type"]
     max_age       = 300
