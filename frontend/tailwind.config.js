@@ -8,32 +8,56 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        'bg-primary': '#0a0f1a',
-        'bg-secondary': '#111827',
-        'bg-card': '#1e293b',
-        'accent-primary': '#06b6d4',
-        'accent-secondary': '#22d3ee',
-        'accent-glow': '#67e8f9',
-        'text-primary': '#f1f5f9',
-        'text-secondary': '#94a3b8',
-        'text-muted': '#64748b',
+        'bg-primary': '#0a0a0a',
+        'bg-secondary': '#121212',
+        'bg-panel': '#141414',
+        'line': '#2a2a2a',
+        'line-bright': '#3d3d3d',
+        'fg-primary': '#eaeaea',
+        'fg-secondary': '#8a8a8a',
+        'fg-muted': '#5c5c5c',
+        'accent': '#5b7a8c',
+        'accent-dim': '#46606f',
+        'signal': '#4af626',
       },
       fontFamily: {
-        mono: ['JetBrains Mono', 'Fira Code', 'monospace'],
+        display: ['var(--font-archivo-black)', 'Arial Black', 'sans-serif'],
+        mono: ['var(--font-jetbrains-mono)', 'IBM Plex Mono', 'monospace'],
       },
-      animation: {
-        'glow': 'glow 2s ease-in-out infinite alternate',
-        'float': 'float 3s ease-in-out infinite',
+      borderRadius: {
+        none: '0px',
+        DEFAULT: '0px',
+        sm: '0px',
+        md: '0px',
+        lg: '0px',
+        xl: '0px',
+        '2xl': '0px',
+        '3xl': '0px',
+        full: '0px',
+      },
+      boxShadow: {
+        none: 'none',
+      },
+      letterSpacing: {
+        tightest: '-0.06em',
+        data: '0.08em',
       },
       keyframes: {
-        glow: {
-          '0%': { boxShadow: '0 0 5px #06b6d4, 0 0 10px #06b6d4' },
-          '100%': { boxShadow: '0 0 10px #22d3ee, 0 0 20px #22d3ee' },
+        flicker: {
+          '0%, 100%': { opacity: '1' },
+          '8%': { opacity: '0.4' },
+          '10%': { opacity: '1' },
+          '20%': { opacity: '0.7' },
+          '22%': { opacity: '1' },
         },
-        float: {
-          '0%, 100%': { transform: 'translateY(0)' },
-          '50%': { transform: 'translateY(-10px)' },
+        scan: {
+          '0%': { backgroundPosition: '0 0' },
+          '100%': { backgroundPosition: '0 100%' },
         },
+      },
+      animation: {
+        flicker: 'flicker 1.2s steps(1) 1',
+        scan: 'scan 8s linear infinite',
       },
     },
   },

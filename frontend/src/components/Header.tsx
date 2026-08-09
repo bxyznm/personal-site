@@ -2,42 +2,40 @@
 
 import Link from 'next/link'
 import { useState } from 'react'
+import { AnimatePresence, motion } from 'framer-motion'
 import { FiMenu, FiX, FiTerminal } from 'react-icons/fi'
 
 const navigation = [
-  { name: 'Home', href: '/' },
-  { name: 'About', href: '/about' },
-  { name: 'Projects', href: '/projects' },
-  { name: 'Blog', href: '/blog' },
-  { name: 'Contact', href: '/contact' },
+  { name: 'HOME', href: '/' },
+  { name: 'ABOUT', href: '/about' },
+  { name: 'PROJECTS', href: '/projects' },
+  { name: 'BLOG', href: '/blog' },
+  { name: 'CONTACT', href: '/contact' },
 ]
 
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
   return (
-    <header className="sticky top-0 z-50 bg-bg-primary/80 backdrop-blur-md border-b border-bg-card">
+    <header className="sticky top-0 z-50 bg-bg-primary/95 border-b border-line">
       <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <Link href="/" className="flex items-center space-x-2 group">
-            <FiTerminal className="w-6 h-6 text-accent-primary group-hover:text-accent-glow transition-colors" />
-            <span className="font-mono font-bold text-lg text-text-primary">
-              ~/brxvn
+            <FiTerminal className="w-5 h-5 text-accent" />
+            <span className="font-mono font-bold text-sm tracking-data text-fg-primary uppercase">
+              UNIT / BRXVN-01
             </span>
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-1">
+          <div className="hidden md:flex items-stretch">
             {navigation.map((item) => (
               <Link
                 key={item.name}
                 href={item.href}
-                className="px-4 py-2 text-text-secondary hover:text-accent-primary font-mono text-sm transition-colors relative group"
+                className="flex items-center px-4 border-l border-line text-fg-secondary hover:text-accent hover:bg-bg-panel font-mono text-xs tracking-data transition-colors"
               >
-                <span className="text-accent-primary opacity-0 group-hover:opacity-100 transition-opacity">
-                  {'> '}
-                </span>
                 {item.name}
               </Link>
             ))}
@@ -46,35 +44,40 @@ export default function Header() {
           {/* Mobile menu button */}
           <button
             type="button"
-            className="md:hidden p-2 text-text-secondary hover:text-accent-primary transition-colors"
+            className="md:hidden p-2 text-fg-secondary hover:text-accent transition-colors"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            aria-label="Toggle navigation"
           >
-            {mobileMenuOpen ? (
-              <FiX className="w-6 h-6" />
-            ) : (
-              <FiMenu className="w-6 h-6" />
-            )}
+            {mobileMenuOpen ? <FiX className="w-6 h-6" /> : <FiMenu className="w-6 h-6" />}
           </button>
         </div>
 
         {/* Mobile Navigation */}
-        {mobileMenuOpen && (
-          <div className="md:hidden py-4 border-t border-bg-card">
-            <div className="flex flex-col space-y-2">
-              {navigation.map((item) => (
-                <Link
-                  key={item.name}
-                  href={item.href}
-                  className="px-4 py-2 text-text-secondary hover:text-accent-primary hover:bg-bg-card font-mono text-sm transition-colors rounded"
-                  onClick={() => setMobileMenuOpen(false)}
-                >
-                  <span className="text-accent-primary">{'> '}</span>
-                  {item.name}
-                </Link>
-              ))}
-            </div>
-          </div>
-        )}
+        <AnimatePresence>
+          {mobileMenuOpen && (
+            <motion.div
+              className="md:hidden overflow-hidden border-t border-line"
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: 'auto', opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={{ duration: 0.15, ease: 'easeInOut' }}
+            >
+              <div className="flex flex-col">
+                {navigation.map((item) => (
+                  <Link
+                    key={item.name}
+                    href={item.href}
+                    className="px-4 py-3 border-t border-line first:border-t-0 text-fg-secondary hover:text-accent hover:bg-bg-panel font-mono text-xs tracking-data transition-colors"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    {'>>> '}
+                    {item.name}
+                  </Link>
+                ))}
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </nav>
     </header>
   )

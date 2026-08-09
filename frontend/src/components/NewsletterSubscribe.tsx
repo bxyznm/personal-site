@@ -10,7 +10,7 @@ interface NewsletterSubscribeProps {
 }
 
 export default function NewsletterSubscribe({
-  title = 'Subscribe to the Newsletter',
+  title = 'SUBSCRIBE TO FEED',
   description = 'Get notified when new blog posts are published. No spam, unsubscribe anytime.',
   compact = false,
 }: NewsletterSubscribeProps) {
@@ -30,17 +30,15 @@ export default function NewsletterSubscribe({
 
   if (isSubmitted) {
     return (
-      <div className={`bg-bg-card border border-accent-primary/30 rounded-lg ${compact ? 'p-4' : 'p-6'}`}>
-        <div className="flex items-center justify-center space-x-3">
-          <div className="p-2 bg-green-500/10 rounded-full">
-            <FiCheck className="w-6 h-6 text-green-400" />
-          </div>
+      <div className={`bg-bg-panel border border-line ${compact ? 'p-4' : 'p-6'}`}>
+        <div className="flex items-center space-x-3">
+          <FiCheck className="w-5 h-5 text-signal shrink-0" />
           <div>
-            <h3 className={`font-mono font-semibold text-green-400 ${compact ? 'text-base' : 'text-lg'}`}>
-              Thanks for subscribing!
+            <h3 className={`font-mono font-semibold tracking-data text-fg-primary uppercase ${compact ? 'text-xs' : 'text-sm'}`}>
+              SUBSCRIBED
             </h3>
-            <p className="text-text-muted text-sm">
-              You&apos;ll be notified about new posts soon.
+            <p className="text-fg-secondary text-xs">
+              You&apos;ll be notified about new posts.
             </p>
           </div>
         </div>
@@ -49,48 +47,38 @@ export default function NewsletterSubscribe({
   }
 
   return (
-    <div className={`bg-bg-card border border-accent-primary/30 rounded-lg ${compact ? 'p-4' : 'p-6'}`}>
-      <div className="flex items-start space-x-4 mb-4">
-        <div className="p-2 bg-accent-primary/10 rounded-lg">
-          <FiMail className="w-5 h-5 text-accent-primary" />
-        </div>
+    <div className={`bg-bg-panel border border-line ${compact ? 'p-4' : 'p-6'}`}>
+      <div className="flex items-start space-x-3 mb-4 pb-4 border-b border-line">
+        <FiMail className="w-4 h-4 text-accent shrink-0 mt-0.5" />
         <div className="flex-1">
-          <h3 className={`font-mono font-semibold text-text-primary ${compact ? 'text-base' : 'text-lg'} mb-1`}>
+          <h3 className={`font-mono font-semibold tracking-data text-fg-primary uppercase ${compact ? 'text-xs' : 'text-sm'} mb-1`}>
             {title}
           </h3>
-          <p className={`text-text-secondary ${compact ? 'text-xs' : 'text-sm'}`}>
+          <p className={`text-fg-secondary ${compact ? 'text-xs' : 'text-sm'}`}>
             {description}
           </p>
         </div>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-3">
-        <div>
-          <label htmlFor="newsletter-email" className="block text-sm font-mono text-text-secondary mb-2">
-            Email Address
-          </label>
-          <input
-            type="email"
-            id="newsletter-email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-            className="w-full px-4 py-3 bg-bg-secondary border border-bg-card rounded-lg text-text-primary placeholder-text-muted focus:border-accent-primary focus:outline-none focus:ring-1 focus:ring-accent-primary transition-colors font-mono"
-            placeholder="you@example.com"
-          />
-        </div>
+        <input
+          type="email"
+          id="newsletter-email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+          aria-label="Email address"
+          className="w-full px-3 py-2.5 bg-bg-secondary border border-line text-fg-primary placeholder-fg-secondary focus:border-accent focus:outline-none transition-colors font-mono text-sm"
+          placeholder="you@example.com"
+        />
 
         <button
           type="submit"
-          className={`w-full flex items-center justify-center space-x-2 px-6 ${compact ? 'py-2' : 'py-3'} bg-accent-primary text-bg-primary font-mono font-semibold rounded-lg hover:bg-accent-secondary transition-colors glow-effect`}
+          className={`w-full flex items-center justify-center space-x-2 px-4 ${compact ? 'py-2' : 'py-2.5'} bg-accent text-bg-primary font-mono font-semibold tracking-data uppercase text-xs hover:bg-fg-primary transition-colors`}
         >
-          <FiSend className="w-4 h-4" />
+          <FiSend className="w-3.5 h-3.5" />
           <span>Subscribe</span>
         </button>
-
-        <p className="text-xs text-text-muted text-center">
-          Backend integration coming soon. Your subscription will be saved.
-        </p>
       </form>
     </div>
   )
