@@ -1,7 +1,22 @@
 import type { Metadata } from 'next'
+import { Archivo_Black, JetBrains_Mono } from 'next/font/google'
 import './globals.css'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
+
+const archivoBlack = Archivo_Black({
+  subsets: ['latin'],
+  weight: '400',
+  variable: '--font-archivo-black',
+  display: 'swap',
+})
+
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ['latin'],
+  weight: ['400', '500', '600', '700'],
+  variable: '--font-jetbrains-mono',
+  display: 'swap',
+})
 
 export const metadata: Metadata = {
   title: 'SRE/DevOps Engineer | Portfolio',
@@ -21,14 +36,9 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en">
-      <head>
-        <link
-          href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap"
-          rel="stylesheet"
-        />
-      </head>
-      <body className="min-h-screen bg-bg-primary text-text-primary antialiased">
+    <html lang="en" className={`${archivoBlack.variable} ${jetbrainsMono.variable}`}>
+      <body className="min-h-screen bg-bg-primary text-fg-primary antialiased">
+        <div aria-hidden="true" className="crt-overlay" />
         <div className="flex flex-col min-h-screen">
           <Header />
           <main className="flex-grow">
