@@ -1,4 +1,4 @@
-import { FiGithub, FiExternalLink, FiFolder } from 'react-icons/fi'
+import { GithubLogo, ArrowUpRight, FolderSimple } from '@phosphor-icons/react/dist/ssr'
 
 interface ProjectCardProps {
   title: string
@@ -16,20 +16,21 @@ export default function ProjectCard({
   liveUrl,
 }: ProjectCardProps) {
   return (
-    <div className="bg-bg-panel border border-line panel-hover p-6 flex flex-col h-full">
-      {/* Header */}
-      <div className="flex items-start justify-between mb-4 pb-4 border-b border-line">
-        <FiFolder className="w-5 h-5 text-accent" />
-        <div className="flex items-center space-x-3">
+    <div className="bg-bg-panel border border-line rounded-2xl panel-hover p-6 flex flex-col h-full">
+      <div className="flex items-start justify-between mb-4">
+        <div className="w-10 h-10 rounded-full bg-accent/10 flex items-center justify-center">
+          <FolderSimple size={18} className="text-accent" />
+        </div>
+        <div className="flex items-center gap-3">
           {githubUrl && (
             <a
               href={githubUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-fg-secondary hover:text-accent transition-colors"
+              className="text-fg-secondary hover:text-fg-primary transition-colors"
               aria-label="View on GitHub"
             >
-              <FiGithub className="w-4 h-4" />
+              <GithubLogo size={18} />
             </a>
           )}
           {liveUrl && (
@@ -37,27 +38,25 @@ export default function ProjectCard({
               href={liveUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-fg-secondary hover:text-accent transition-colors"
+              className="text-fg-secondary hover:text-fg-primary transition-colors"
               aria-label="View live demo"
             >
-              <FiExternalLink className="w-4 h-4" />
+              <ArrowUpRight size={18} />
             </a>
           )}
         </div>
       </div>
 
-      {/* Content */}
-      <h3 className="font-mono font-semibold text-sm tracking-data text-fg-primary uppercase mb-2">
+      <h3 className="font-display font-bold text-lg text-fg-primary mb-2 tracking-tightest">
         {title}
       </h3>
-      <p className="text-fg-secondary text-sm flex-grow mb-4">{description}</p>
+      <p className="text-fg-secondary text-sm leading-relaxed flex-grow mb-4">{description}</p>
 
-      {/* Tags */}
-      <div className="flex flex-wrap gap-2 mt-auto pt-4 border-t border-line">
+      <div className="flex flex-wrap gap-1.5 mt-auto pt-4 border-t border-line">
         {tags.map((tag) => (
-          <kbd key={tag} className="text-xs font-mono text-fg-secondary border border-line px-1.5 py-0.5">
+          <span key={tag} className="text-xs text-fg-secondary bg-bg-secondary rounded-full px-2.5 py-1">
             {tag}
-          </kbd>
+          </span>
         ))}
       </div>
     </div>

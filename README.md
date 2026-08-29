@@ -1,6 +1,6 @@
 # SRE/DevOps Portfolio Website
 
-A personal portfolio website showcasing SRE/DevOps expertise, built with Next.js 14 and deployed to AWS with full infrastructure as code.
+A personal portfolio website showcasing SRE/DevOps expertise, built with Next.js 15 and deployed to AWS with full infrastructure as code.
 
 **Live Demo**: [https://bxyzn.com](https://bxyzn.com)
 
@@ -8,7 +8,7 @@ A personal portfolio website showcasing SRE/DevOps expertise, built with Next.js
 
 - **Static Site Generation** - Lightning-fast performance with Next.js App Router
 - **MDX Blog** - Write blog posts in Markdown with React components
-- **Terminal-Inspired Design** - Dark mode with cyan/blue accents
+- **Structured Edge Design** - Dark plum palette with coral accents, Cabinet Grotesk typography
 - **AWS Infrastructure** - S3 + CloudFront CDN with SSL/TLS
 - **CI/CD Pipeline** - Automated deployment with GitHub Actions
 - **Infrastructure as Code** - Complete Terraform configuration
@@ -17,8 +17,11 @@ A personal portfolio website showcasing SRE/DevOps expertise, built with Next.js
 
 | Layer | Technology |
 |-------|-----------|
-| **Framework** | Next.js 14 (App Router, Static Export) |
+| **Framework** | Next.js 15 (App Router, Static Export) |
 | **Styling** | Tailwind CSS |
+| **Motion** | Motion (`motion/react`) |
+| **Icons** | Phosphor Icons |
+| **Fonts** | Cabinet Grotesk (self-hosted), Inter Tight, JetBrains Mono |
 | **Blog** | MDX with frontmatter |
 | **Hosting** | AWS S3 + CloudFront |
 | **SSL/TLS** | AWS Certificate Manager |
@@ -32,6 +35,7 @@ A personal portfolio website showcasing SRE/DevOps expertise, built with Next.js
 
 ```bash
 # Install dependencies
+cd frontend
 npm install
 
 # Start development server
@@ -66,21 +70,25 @@ git push origin main
 ├── .github/workflows/    # CI/CD pipelines
 │   ├── deploy.yml       # Build and deploy to AWS
 │   └── terraform.yml    # Infrastructure management
-├── content/blog/        # MDX blog posts
-├── docs/               # Documentation
-├── public/             # Static assets
-├── src/
-│   ├── app/           # Next.js App Router pages
-│   ├── components/    # React components
-│   └── lib/          # Utilities (MDX processing)
-├── terraform/         # Infrastructure as Code
-└── CLAUDE.md         # AI assistant instructions
+├── backend/             # Serverless contact form (AWS Lambda)
+├── docs/                # Documentation
+├── frontend/            # Next.js application
+│   ├── content/blog/    # MDX blog posts
+│   ├── public/          # Static assets (font licenses)
+│   └── src/
+│       ├── app/         # Next.js App Router pages
+│       ├── components/  # React components
+│       ├── fonts/       # Self-hosted fonts (Cabinet Grotesk)
+│       └── lib/         # Utilities (MDX processing, data)
+├── terraform/           # Infrastructure as Code
+└── CLAUDE.md            # AI assistant instructions
 ```
 
 ## Key Commands
 
 ```bash
-# Development
+# Development (from frontend/)
+cd frontend
 npm run dev              # Start dev server
 npm run build            # Build static site
 npm run lint             # Lint code
@@ -100,7 +108,7 @@ terraform output        # View outputs
 
 ## Blog System
 
-Write blog posts in MDX format in `content/blog/`:
+Write blog posts in MDX format in `frontend/content/blog/`:
 
 ```mdx
 ---
@@ -120,19 +128,19 @@ See [Development Guide](docs/DEVELOPMENT.md#adding-blog-posts) for details.
 ## Customization
 
 Update personal information in:
-- [src/app/page.tsx](src/app/page.tsx) - Home page
-- [src/app/about/page.tsx](src/app/about/page.tsx) - About and skills
-- [src/app/projects/page.tsx](src/app/projects/page.tsx) - Projects
-- [src/app/contact/page.tsx](src/app/contact/page.tsx) - Contact info
-- [src/components/Footer.tsx](src/components/Footer.tsx) - Social links
+- [frontend/src/app/page.tsx](frontend/src/app/page.tsx) - Home page
+- [frontend/src/app/about/page.tsx](frontend/src/app/about/page.tsx) - About and skills
+- [frontend/src/app/projects/page.tsx](frontend/src/app/projects/page.tsx) - Projects
+- [frontend/src/app/contact/page.tsx](frontend/src/app/contact/page.tsx) - Contact info
+- [frontend/src/components/Footer.tsx](frontend/src/components/Footer.tsx) - Social links
 
-Edit theme in [tailwind.config.js](tailwind.config.js):
+Edit theme in [frontend/tailwind.config.js](frontend/tailwind.config.js):
 
 ```javascript
 colors: {
-  'bg-primary': '#0a0f1a',       // Main background
-  'accent-primary': '#06b6d4',   // Accent color (cyan)
-  'text-primary': '#f1f5f9',     // Text color
+  'bg-primary': '#141217',       // Main background (plum)
+  'accent': '#E8724C',           // Accent color (coral)
+  'fg-primary': '#F6F4F1',       // Text color
 }
 ```
 

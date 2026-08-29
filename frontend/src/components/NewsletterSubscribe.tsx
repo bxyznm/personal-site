@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, FormEvent } from 'react'
-import { FiMail, FiSend, FiCheck } from 'react-icons/fi'
+import { EnvelopeSimple, PaperPlaneTilt, Check } from '@phosphor-icons/react'
 
 interface NewsletterSubscribeProps {
   title?: string
@@ -10,7 +10,7 @@ interface NewsletterSubscribeProps {
 }
 
 export default function NewsletterSubscribe({
-  title = 'SUBSCRIBE TO FEED',
+  title = 'Subscribe to updates',
   description = 'Get notified when new blog posts are published. No spam, unsubscribe anytime.',
   compact = false,
 }: NewsletterSubscribeProps) {
@@ -30,15 +30,17 @@ export default function NewsletterSubscribe({
 
   if (isSubmitted) {
     return (
-      <div className={`bg-bg-panel border border-line ${compact ? 'p-4' : 'p-6'}`}>
-        <div className="flex items-center space-x-3">
-          <FiCheck className="w-5 h-5 text-signal shrink-0" />
+      <div className={`bg-bg-panel border border-line rounded-2xl ${compact ? 'p-4' : 'p-6'}`}>
+        <div className="flex items-center gap-3">
+          <div className="w-9 h-9 rounded-full bg-signal/10 flex items-center justify-center shrink-0">
+            <Check size={18} className="text-signal" />
+          </div>
           <div>
-            <h3 className={`font-mono font-semibold tracking-data text-fg-primary uppercase ${compact ? 'text-xs' : 'text-sm'}`}>
-              SUBSCRIBED
+            <h3 className={`font-semibold text-fg-primary ${compact ? 'text-sm' : 'text-base'}`}>
+              Subscribed
             </h3>
             <p className="text-fg-secondary text-xs">
-              You&apos;ll be notified about new posts.
+              You will be notified about new posts.
             </p>
           </div>
         </div>
@@ -47,11 +49,11 @@ export default function NewsletterSubscribe({
   }
 
   return (
-    <div className={`bg-bg-panel border border-line ${compact ? 'p-4' : 'p-6'}`}>
-      <div className="flex items-start space-x-3 mb-4 pb-4 border-b border-line">
-        <FiMail className="w-4 h-4 text-accent shrink-0 mt-0.5" />
+    <div className={`bg-bg-panel border border-line rounded-2xl ${compact ? 'p-4' : 'p-6'}`}>
+      <div className="flex items-start gap-3 mb-4">
+        <EnvelopeSimple size={18} className="text-accent shrink-0 mt-0.5" />
         <div className="flex-1">
-          <h3 className={`font-mono font-semibold tracking-data text-fg-primary uppercase ${compact ? 'text-xs' : 'text-sm'} mb-1`}>
+          <h3 className={`font-semibold text-fg-primary ${compact ? 'text-sm' : 'text-base'} mb-1`}>
             {title}
           </h3>
           <p className={`text-fg-secondary ${compact ? 'text-xs' : 'text-sm'}`}>
@@ -68,15 +70,15 @@ export default function NewsletterSubscribe({
           onChange={(e) => setEmail(e.target.value)}
           required
           aria-label="Email address"
-          className="w-full px-3 py-2.5 bg-bg-secondary border border-line text-fg-primary placeholder-fg-secondary focus:border-accent focus:outline-none transition-colors font-mono text-sm"
+          className="w-full px-3.5 py-2.5 bg-bg-secondary border border-line rounded-xl text-fg-primary placeholder-fg-secondary/60 focus:border-accent focus:outline-none transition-colors text-sm"
           placeholder="you@example.com"
         />
 
         <button
           type="submit"
-          className={`w-full flex items-center justify-center space-x-2 px-4 ${compact ? 'py-2' : 'py-2.5'} bg-accent text-bg-primary font-mono font-semibold tracking-data uppercase text-xs hover:bg-fg-primary transition-colors`}
+          className={`w-full flex items-center justify-center gap-2 px-4 ${compact ? 'py-2' : 'py-2.5'} bg-accent text-bg-primary rounded-full font-medium text-sm hover:bg-accent-dim transition-colors`}
         >
-          <FiSend className="w-3.5 h-3.5" />
+          <PaperPlaneTilt size={16} />
           <span>Subscribe</span>
         </button>
       </form>

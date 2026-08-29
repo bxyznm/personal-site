@@ -1,31 +1,42 @@
 import type { Metadata } from 'next'
-import { Archivo_Black, JetBrains_Mono } from 'next/font/google'
+import localFont from 'next/font/local'
+import { Inter_Tight, JetBrains_Mono } from 'next/font/google'
 import './globals.css'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 
-const archivoBlack = Archivo_Black({
+const cabinetGrotesk = localFont({
+  src: [
+    { path: '../fonts/cabinet-grotesk/CabinetGrotesk-Medium.woff2', weight: '500', style: 'normal' },
+    { path: '../fonts/cabinet-grotesk/CabinetGrotesk-Bold.woff2', weight: '700', style: 'normal' },
+    { path: '../fonts/cabinet-grotesk/CabinetGrotesk-Extrabold.woff2', weight: '800', style: 'normal' },
+    { path: '../fonts/cabinet-grotesk/CabinetGrotesk-Black.woff2', weight: '900', style: 'normal' },
+  ],
+  variable: '--font-cabinet-grotesk',
+  display: 'swap',
+})
+
+const interTight = Inter_Tight({
   subsets: ['latin'],
-  weight: '400',
-  variable: '--font-archivo-black',
+  variable: '--font-inter-tight',
   display: 'swap',
 })
 
 const jetbrainsMono = JetBrains_Mono({
   subsets: ['latin'],
-  weight: ['400', '500', '600', '700'],
+  weight: ['400', '500', '600'],
   variable: '--font-jetbrains-mono',
   display: 'swap',
 })
 
 export const metadata: Metadata = {
-  title: 'SRE/DevOps Engineer | Portfolio',
-  description: 'Personal portfolio showcasing SRE/DevOps expertise in cloud infrastructure, Kubernetes, CI/CD, and infrastructure as code.',
+  title: 'Bryan Mendoza | SRE / DevOps Engineer',
+  description: 'Portfolio of Bryan Mendoza, a Site Reliability Engineer working on cloud infrastructure, Kubernetes, CI/CD, and observability.',
   keywords: ['SRE', 'DevOps', 'Cloud', 'AWS', 'Kubernetes', 'Terraform', 'CI/CD'],
-  authors: [{ name: 'SRE Engineer' }],
+  authors: [{ name: 'Bryan Mendoza' }],
   openGraph: {
-    title: 'SRE/DevOps Engineer | Portfolio',
-    description: 'Personal portfolio showcasing SRE/DevOps expertise',
+    title: 'Bryan Mendoza | SRE / DevOps Engineer',
+    description: 'Portfolio of Bryan Mendoza, a Site Reliability Engineer working on cloud infrastructure, Kubernetes, CI/CD, and observability.',
     type: 'website',
   },
 }
@@ -36,9 +47,11 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" className={`${archivoBlack.variable} ${jetbrainsMono.variable}`}>
+    <html
+      lang="en"
+      className={`${cabinetGrotesk.variable} ${interTight.variable} ${jetbrainsMono.variable}`}
+    >
       <body className="min-h-screen bg-bg-primary text-fg-primary antialiased">
-        <div aria-hidden="true" className="crt-overlay" />
         <div className="flex flex-col min-h-screen">
           <Header />
           <main className="flex-grow">
