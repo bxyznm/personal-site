@@ -19,8 +19,8 @@ export default function Home() {
             </h1>
 
             <p className="text-fg-secondary text-lg max-w-xl mb-8 leading-relaxed">
-              Site Reliability Engineer automating cloud infrastructure, Kubernetes, and
-              CI/CD so things stay online without anyone noticing.
+              DevSecOps engineer with an SRE background, automating secure cloud infrastructure,
+              Kubernetes, and CI/CD so things stay online without anyone noticing.
             </p>
 
             <div className="flex flex-wrap items-center gap-3 mb-8">

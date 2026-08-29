@@ -28,7 +28,8 @@ export default function Header() {
 
           <div className="hidden md:flex items-center gap-1 bg-bg-panel border border-line rounded-full p-1">
             {navigation.map((item) => {
-              const active = pathname === item.href
+              const active =
+                pathname === item.href || pathname === item.href.replace(/\/?$/, '/')
               return (
                 <Link
                   key={item.name}
@@ -40,11 +41,11 @@ export default function Header() {
                   {active && (
                     <motion.span
                       layoutId="nav-active"
-                      className="absolute inset-0 bg-accent rounded-full -z-10"
+                      className="absolute inset-0 bg-accent rounded-full"
                       transition={{ type: 'spring', stiffness: 350, damping: 30 }}
                     />
                   )}
-                  {item.name}
+                  <span className="relative z-10">{item.name}</span>
                 </Link>
               )
             })}

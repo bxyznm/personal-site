@@ -8,11 +8,17 @@ export interface ExperienceEntry {
 
 export const experience: ExperienceEntry[] = [
   {
+    title: 'DevSecOps Engineer',
+    company: "McDonald's",
+    period: 'Jul 2026 - Present',
+    description: 'Designing and maintaining secure CI/CD pipelines with Azure DevOps, GitHub Actions, and Jenkins. Integrating security tools into the delivery lifecycle — SAST, DAST, and SCA with Snyk — and managing secrets with Azure Key Vault across Docker and AKS.',
+    current: true,
+  },
+  {
     title: 'Site Reliability Engineer',
     company: 'Thomson Reuters',
-    period: 'Feb 2025 - Present',
+    period: 'Feb 2025 - Jun 2026',
     description: 'Speeding up CI/CD builds, cutting infrastructure costs, and making sure deployments do not break things. Basically keeping the systems happy.',
-    current: true,
   },
   {
     title: 'Site Reliability Engineer',

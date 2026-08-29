@@ -30,13 +30,13 @@ const jetbrainsMono = JetBrains_Mono({
 })
 
 export const metadata: Metadata = {
-  title: 'Bryan Mendoza | SRE / DevOps Engineer',
-  description: 'Portfolio of Bryan Mendoza, a Site Reliability Engineer working on cloud infrastructure, Kubernetes, CI/CD, and observability.',
-  keywords: ['SRE', 'DevOps', 'Cloud', 'AWS', 'Kubernetes', 'Terraform', 'CI/CD'],
+  title: 'Bryan Mendoza | DevSecOps & SRE Engineer',
+  description: 'Portfolio of Bryan Mendoza, a DevSecOps engineer with an SRE background building secure, reliable cloud infrastructure across Azure, AWS, Kubernetes, and CI/CD.',
+  keywords: ['SRE', 'DevOps', 'DevSecOps', 'Cloud', 'AWS', 'Azure', 'Kubernetes', 'Terraform', 'CI/CD', 'Snyk', 'Security'],
   authors: [{ name: 'Bryan Mendoza' }],
   openGraph: {
-    title: 'Bryan Mendoza | SRE / DevOps Engineer',
-    description: 'Portfolio of Bryan Mendoza, a Site Reliability Engineer working on cloud infrastructure, Kubernetes, CI/CD, and observability.',
+    title: 'Bryan Mendoza | DevSecOps & SRE Engineer',
+    description: 'Portfolio of Bryan Mendoza, a DevSecOps engineer with an SRE background building secure, reliable cloud infrastructure.',
     type: 'website',
   },
 }

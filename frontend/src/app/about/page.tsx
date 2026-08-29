@@ -52,7 +52,7 @@ export default function About() {
         <Reveal className="mb-16 max-w-2xl">
           <h1 className="font-display font-black text-3xl sm:text-4xl tracking-tightest mb-4">About me</h1>
           <p className="text-fg-secondary text-lg leading-relaxed">
-            SRE based in Mexico. Keeping systems alive and automating the boring stuff.
+            DevSecOps engineer based in Mexico, with an SRE background. Keeping systems secure, alive, and automated.
           </p>
         </Reveal>
 
@@ -71,18 +71,19 @@ export default function About() {
                   <h2 className="font-display font-bold text-xl text-fg-primary mb-4 tracking-tightest">Hey, I&apos;m Bryan!</h2>
                   <div className="space-y-4 text-fg-secondary leading-relaxed">
                     <p>
-                      I&apos;m a Site Reliability Engineer from Mexico. I studied Computer Systems
-                      Engineering and somehow ended up really enjoying the whole &quot;keeping systems
-                      running&quot; thing. Go figure.
+                      I&apos;m a DevSecOps engineer from Mexico. I studied Computer Systems
+                      Engineering and started out as an SRE, which is how I ended up really
+                      enjoying the whole &quot;keeping systems running&quot; thing. Go figure.
                     </p>
                     <p>
-                      Most of my day involves working with AWS, GitHub Actions, and making sure things
-                      do not catch fire. I am big on automation. If I have to do something more
-                      than twice, I am writing a script for it: CloudFormation, Terraform, Ansible,
-                      Python, whatever gets the job done.
+                      Most of my day involves building secure CI/CD pipelines on Azure DevOps
+                      and GitHub Actions, integrating security tools into the delivery lifecycle,
+                      and making sure things do not catch fire. I am big on automation. If I have
+                      to do something more than twice, I am writing a script for it: Terraform,
+                      Ansible, Python, whatever gets the job done.
                     </p>
                     <p>
-                      Outside of SRE work, I like building random stuff in Python and occasionally
+                      Outside of security and SRE work, I like building random stuff in Python and occasionally
                       diving into web dev just for fun (like this page). I also built a Windows app
                       for small businesses back in the day, so I am not afraid of switching things up.
                     </p>
@@ -91,7 +92,7 @@ export default function About() {
                   <div className="grid grid-cols-3 gap-4 mt-8 pt-8 border-t border-line">
                     <div>
                       <data value="3" className="block font-display font-bold text-2xl text-accent tabular-nums">3+</data>
-                      <div className="text-xs text-fg-secondary mt-1">Years SRE</div>
+                      <div className="text-xs text-fg-secondary mt-1">Years Experience</div>
                     </div>
                     <div>
                       <div className="font-display font-bold text-2xl text-fg-primary">BSc</div>
