@@ -15,7 +15,7 @@ const skillCategories = [
   {
     title: 'Cloud & Infra',
     icon: CloudArrowUp,
-    skills: [{ name: 'AWS' }, { name: 'Linux' }, { name: 'Kubernetes' }, { name: 'Docker' }],
+    skills: [{ name: 'AWS' }, { name: 'GCP' }, { name: 'Kubernetes' }, { name: 'Docker' }, { name: 'Linux' }],
   },
   {
     title: 'Infrastructure as Code',
@@ -25,7 +25,7 @@ const skillCategories = [
   {
     title: 'CI/CD & DevOps',
     icon: GitBranch,
-    skills: [{ name: 'GitHub Actions' }, { name: 'Jenkins' }, { name: 'Git' }],
+    skills: [{ name: 'GitHub Actions' }, { name: 'Azure DevOps' }, { name: 'Jenkins' }, { name: 'Git' }],
   },
   {
     title: 'Monitoring & Observability',
@@ -52,7 +52,7 @@ export default function About() {
         <Reveal className="mb-16 max-w-2xl">
           <h1 className="font-display font-black text-3xl sm:text-4xl tracking-tightest mb-4">About me</h1>
           <p className="text-fg-secondary text-lg leading-relaxed">
-            DevSecOps engineer based in Mexico, with an SRE background. Keeping systems secure, alive, and automated.
+            DevSecOps engineer based in Mexico, with an SRE background. AWS is my main cloud — GCP at the day job. Keeping systems secure, alive, and automated.
           </p>
         </Reveal>
 
@@ -76,11 +76,11 @@ export default function About() {
                       enjoying the whole &quot;keeping systems running&quot; thing. Go figure.
                     </p>
                     <p>
-                      Most of my day involves building secure CI/CD pipelines on Azure DevOps
-                      and GitHub Actions, integrating security tools into the delivery lifecycle,
-                      and making sure things do not catch fire. I am big on automation. If I have
-                      to do something more than twice, I am writing a script for it: Terraform,
-                      Ansible, Python, whatever gets the job done.
+                      Most of my day involves building secure CI/CD pipelines on GCP with GitHub
+                      Actions, integrating security tools into the delivery lifecycle, and making
+                      sure things do not catch fire — with AWS as my go-to cloud. I am big on
+                      automation. If I have to do something more than twice, I am writing a script
+                      for it: Terraform, Ansible, Python, whatever gets the job done.
                     </p>
                     <p>
                       Outside of security and SRE work, I like building random stuff in Python and occasionally
@@ -91,7 +91,7 @@ export default function About() {
 
                   <div className="grid grid-cols-3 gap-4 mt-8 pt-8 border-t border-line">
                     <div>
-                      <data value="3" className="block font-display font-bold text-2xl text-accent tabular-nums">3+</data>
+                      <data value="5" className="block font-display font-bold text-2xl text-accent tabular-nums">5+</data>
                       <div className="text-xs text-fg-secondary mt-1">Years Experience</div>
                     </div>
                     <div>

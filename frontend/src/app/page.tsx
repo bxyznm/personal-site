@@ -20,7 +20,7 @@ export default function Home() {
 
             <p className="text-fg-secondary text-lg max-w-xl mb-8 leading-relaxed">
               DevSecOps engineer with an SRE background, automating secure cloud infrastructure,
-              Kubernetes, and CI/CD so things stay online without anyone noticing.
+              Kubernetes, and CI/CD across AWS and GCP so things stay online without anyone noticing.
             </p>
 
             <div className="flex flex-wrap items-center gap-3 mb-8">
@@ -77,8 +77,8 @@ export default function Home() {
               <div>
                 <h3 className="font-display font-bold text-lg text-fg-primary mb-2 tracking-tightest">Cloud infrastructure</h3>
                 <p className="text-fg-secondary leading-relaxed">
-                  Setting up cloud infrastructure that actually makes sense across AWS, GCP, and
-                  Azure, all defined as code with Terraform.
+                  Setting up cloud infrastructure that actually makes sense across AWS and GCP,
+                  with AWS as my primary cloud, all defined as code with Terraform.
                 </p>
               </div>
             </RevealItem>

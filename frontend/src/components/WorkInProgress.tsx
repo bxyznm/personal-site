@@ -9,7 +9,7 @@ interface WorkInProgressProps {
 
 export default function WorkInProgress({ title, description }: WorkInProgressProps) {
   return (
-    <Reveal className="max-w-2xl">
+    <Reveal className="max-w-2xl mx-auto w-full">
       <div className="bg-bg-panel border border-line rounded-2xl p-10 lg:p-14 text-center">
         <div className="w-14 h-14 rounded-full bg-accent/10 flex items-center justify-center mx-auto mb-6">
           <Hammer size={26} className="text-accent" />

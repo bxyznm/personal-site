@@ -11,7 +11,7 @@ export const experience: ExperienceEntry[] = [
     title: 'DevSecOps Engineer',
     company: "McDonald's",
     period: 'Jul 2026 - Present',
-    description: 'Designing and maintaining secure CI/CD pipelines with Azure DevOps, GitHub Actions, and Jenkins. Integrating security tools into the delivery lifecycle — SAST, DAST, and SCA with Snyk — and managing secrets with Azure Key Vault across Docker and AKS.',
+    description: 'Designing and maintaining secure CI/CD pipelines on GCP with GitHub Actions, Azure DevOps, and Jenkins. Integrating security tools into the delivery lifecycle — SAST, DAST, and SCA with Snyk — and managing secrets across Docker and Kubernetes.',
     current: true,
   },
   {

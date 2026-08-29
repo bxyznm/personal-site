@@ -30,14 +30,30 @@ const jetbrainsMono = JetBrains_Mono({
 })
 
 export const metadata: Metadata = {
-  title: 'Bryan Mendoza | DevSecOps & SRE Engineer',
-  description: 'Portfolio of Bryan Mendoza, a DevSecOps engineer with an SRE background building secure, reliable cloud infrastructure across Azure, AWS, Kubernetes, and CI/CD.',
-  keywords: ['SRE', 'DevOps', 'DevSecOps', 'Cloud', 'AWS', 'Azure', 'Kubernetes', 'Terraform', 'CI/CD', 'Snyk', 'Security'],
+  metadataBase: new URL('https://bxyzn.com'),
+  title: {
+    default: 'Bryan Mendoza | DevSecOps & SRE Engineer',
+    template: '%s | Bryan Mendoza',
+  },
+  description: 'Portfolio of Bryan Mendoza, a DevSecOps engineer with an SRE background building secure, reliable cloud infrastructure across AWS, GCP, Kubernetes, and CI/CD.',
+  keywords: ['SRE', 'DevOps', 'DevSecOps', 'Cloud', 'AWS', 'GCP', 'Azure', 'Kubernetes', 'Terraform', 'CI/CD', 'Snyk', 'Security'],
   authors: [{ name: 'Bryan Mendoza' }],
+  creator: 'Bryan Mendoza',
+  alternates: {
+    canonical: '/',
+  },
   openGraph: {
     title: 'Bryan Mendoza | DevSecOps & SRE Engineer',
     description: 'Portfolio of Bryan Mendoza, a DevSecOps engineer with an SRE background building secure, reliable cloud infrastructure.',
     type: 'website',
+    url: 'https://bxyzn.com',
+    siteName: 'Bryan Mendoza',
+    locale: 'en_US',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Bryan Mendoza | DevSecOps & SRE Engineer',
+    description: 'Portfolio of Bryan Mendoza, a DevSecOps engineer with an SRE background building secure, reliable cloud infrastructure.',
   },
 }
 
