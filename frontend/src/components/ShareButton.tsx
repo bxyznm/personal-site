@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { FiShare2, FiCheck } from 'react-icons/fi'
+import { ShareNetwork, Check } from '@phosphor-icons/react'
 
 export default function ShareButton({ title }: { title: string }) {
   const [copied, setCopied] = useState(false)
@@ -14,7 +14,7 @@ export default function ShareButton({ title }: { title: string }) {
         await navigator.share({ title, url })
         return
       } catch {
-        // user cancelled or share failed — fall through to clipboard
+        // user cancelled or share failed, fall through to clipboard
       }
     }
 
@@ -26,9 +26,9 @@ export default function ShareButton({ title }: { title: string }) {
   return (
     <button
       onClick={handleShare}
-      className="flex items-center space-x-2 text-fg-secondary hover:text-accent transition-colors font-mono text-xs tracking-data uppercase"
+      className="flex items-center gap-2 text-fg-secondary hover:text-fg-primary transition-colors text-sm"
     >
-      {copied ? <FiCheck className="w-3.5 h-3.5 text-signal" /> : <FiShare2 className="w-3.5 h-3.5" />}
+      {copied ? <Check size={16} className="text-signal" /> : <ShareNetwork size={16} />}
       <span>{copied ? 'Link copied' : 'Share'}</span>
     </button>
   )

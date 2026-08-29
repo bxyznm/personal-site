@@ -1,4 +1,6 @@
+import { ArrowSquareOut } from '@phosphor-icons/react/dist/ssr'
 import ProjectCard from '@/components/ProjectCard'
+import MagneticButton from '@/components/MagneticButton'
 import { Reveal, RevealGroup, RevealItem } from '@/components/Reveal'
 
 const projects = [
@@ -61,64 +63,53 @@ const featuredProject = {
 
 export default function Projects() {
   return (
-    <div className="min-h-screen py-16">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen py-16 lg:py-20">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
-        <Reveal className="mb-16">
-          <h1 className="font-display uppercase leading-[0.9] tracking-tightest text-[clamp(2.25rem,5vw,4rem)] mb-4">
-            PROJECTS
-          </h1>
-          <p className="text-fg-secondary font-mono text-sm uppercase tracking-data">
-            A collection of projects built to solve real infrastructure challenges
+        <Reveal className="mb-16 max-w-2xl">
+          <h1 className="font-display font-black text-3xl sm:text-4xl tracking-tightest mb-4">Projects</h1>
+          <p className="text-fg-secondary text-lg leading-relaxed">
+            A collection of projects built to solve real infrastructure challenges.
           </p>
         </Reveal>
 
         {/* Featured Project */}
         <Reveal>
           <section className="mb-16">
-            <h2 className="font-mono text-xs tracking-data text-fg-secondary uppercase mb-6 pb-2 border-b border-line">
-              [ CAT FEATURED_PROJECT.MD ]
-            </h2>
-            <div className="crosshair bg-bg-panel border border-accent p-8">
+            <p className="text-sm text-fg-secondary mb-4">Featured</p>
+            <div className="bg-bg-panel border border-accent/40 rounded-2xl p-8 lg:p-10">
               <div className="flex flex-wrap gap-2 mb-4">
                 {featuredProject.tags.map((tag) => (
-                  <kbd key={tag} className="px-2 py-1 text-fg-secondary text-xs font-mono border border-line">
+                  <span key={tag} className="px-2.5 py-1 text-fg-secondary text-xs bg-bg-secondary rounded-full">
                     {tag}
-                  </kbd>
+                  </span>
                 ))}
               </div>
-              <h3 className="font-mono text-xl font-bold tracking-data text-fg-primary uppercase mb-4">
+              <h3 className="font-display font-bold text-xl text-fg-primary mb-3 tracking-tightest">
                 {featuredProject.title}
               </h3>
-              <p className="text-fg-secondary mb-6 leading-relaxed">{featuredProject.description}</p>
+              <p className="text-fg-secondary mb-6 leading-relaxed max-w-2xl">{featuredProject.description}</p>
 
-              <ul className="space-y-2 mb-8">
-                {featuredProject.highlights.map((highlight, index) => (
-                  <li key={index} className="flex items-start space-x-2 text-fg-secondary text-sm">
-                    <span className="text-accent shrink-0">&gt;&gt;&gt;</span>
+              <ul className="grid sm:grid-cols-2 gap-3 mb-8 max-w-2xl">
+                {featuredProject.highlights.map((highlight) => (
+                  <li key={highlight} className="flex items-start gap-2 text-fg-secondary text-sm">
+                    <span className="w-1 h-1 rounded-full bg-accent mt-2 shrink-0" />
                     <span>{highlight}</span>
                   </li>
                 ))}
               </ul>
 
-              <a
-                href={featuredProject.githubUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-block px-6 py-2.5 bg-accent text-bg-primary font-mono font-semibold tracking-data uppercase text-sm hover:bg-fg-primary transition-colors"
-              >
+              <MagneticButton href={featuredProject.githubUrl} variant="primary" external>
                 View on GitHub
-              </a>
+              </MagneticButton>
             </div>
           </section>
         </Reveal>
 
-        {/* All Projects Grid */}
+        {/* All Projects */}
         <section>
-          <Reveal>
-            <h2 className="font-mono text-xs tracking-data text-fg-secondary uppercase mb-6 pb-2 border-b border-line">
-              [ LS -LA ./PROJECTS/ ]
-            </h2>
+          <Reveal className="mb-6">
+            <h2 className="font-display font-bold text-2xl tracking-tightest">All projects</h2>
           </Reveal>
           <RevealGroup className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
             {projects.map((project) => (
@@ -136,7 +127,7 @@ export default function Projects() {
 
         {/* GitHub CTA */}
         <Reveal>
-          <section className="mt-16 text-center border border-line p-8">
+          <section className="mt-16 text-center border border-line rounded-2xl p-8">
             <p className="text-fg-secondary mb-4">
               Want to see more? Check out my GitHub for additional projects and contributions.
             </p>
@@ -144,9 +135,10 @@ export default function Projects() {
               href="https://github.com/bxyznm"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center space-x-2 px-6 py-3 border border-accent text-accent font-mono font-semibold tracking-data uppercase text-sm hover:bg-accent hover:text-bg-primary transition-colors"
+              className="inline-flex items-center gap-2 px-5 py-2.5 border border-line rounded-full text-fg-primary font-medium text-sm hover:bg-bg-panel transition-colors"
             >
-              <span>View GitHub Profile</span>
+              View GitHub profile
+              <ArrowSquareOut size={16} />
             </a>
           </section>
         </Reveal>

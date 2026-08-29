@@ -1,58 +1,65 @@
 'use client'
 
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 import { useState } from 'react'
-import { AnimatePresence, motion } from 'framer-motion'
-import { FiMenu, FiX, FiTerminal } from 'react-icons/fi'
+import { AnimatePresence, motion } from 'motion/react'
+import { List, X } from '@phosphor-icons/react'
 
 const navigation = [
-  { name: 'HOME', href: '/' },
-  { name: 'ABOUT', href: '/about' },
-  { name: 'PROJECTS', href: '/projects' },
-  { name: 'BLOG', href: '/blog' },
-  { name: 'CONTACT', href: '/contact' },
+  { name: 'Home', href: '/' },
+  { name: 'About', href: '/about' },
+  { name: 'Projects', href: '/projects' },
+  { name: 'Blog', href: '/blog' },
+  { name: 'Contact', href: '/contact' },
 ]
 
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const pathname = usePathname()
 
   return (
-    <header className="sticky top-0 z-50 bg-bg-primary/95 border-b border-line">
-      <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <header className="sticky top-0 z-50 bg-bg-primary/90 backdrop-blur-md border-b border-line">
+      <nav className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
-          {/* Logo */}
-          <Link href="/" className="flex items-center space-x-2 group">
-            <FiTerminal className="w-5 h-5 text-accent" />
-            <span className="font-mono font-bold text-sm tracking-data text-fg-primary uppercase">
-              UNIT / BRXVN-01
-            </span>
+          <Link href="/" className="font-display font-bold text-lg tracking-tightest text-fg-primary">
+            Bryan Mendoza
           </Link>
 
-          {/* Desktop Navigation */}
-          <div className="hidden md:flex items-stretch">
-            {navigation.map((item) => (
-              <Link
-                key={item.name}
-                href={item.href}
-                className="flex items-center px-4 border-l border-line text-fg-secondary hover:text-accent hover:bg-bg-panel font-mono text-xs tracking-data transition-colors"
-              >
-                {item.name}
-              </Link>
-            ))}
+          <div className="hidden md:flex items-center gap-1 bg-bg-panel border border-line rounded-full p-1">
+            {navigation.map((item) => {
+              const active = pathname === item.href
+              return (
+                <Link
+                  key={item.name}
+                  href={item.href}
+                  className={`relative px-4 py-1.5 rounded-full text-sm transition-colors ${
+                    active ? 'text-bg-primary' : 'text-fg-secondary hover:text-fg-primary'
+                  }`}
+                >
+                  {active && (
+                    <motion.span
+                      layoutId="nav-active"
+                      className="absolute inset-0 bg-accent rounded-full -z-10"
+                      transition={{ type: 'spring', stiffness: 350, damping: 30 }}
+                    />
+                  )}
+                  {item.name}
+                </Link>
+              )
+            })}
           </div>
 
-          {/* Mobile menu button */}
           <button
             type="button"
-            className="md:hidden p-2 text-fg-secondary hover:text-accent transition-colors"
+            className="md:hidden p-2 text-fg-secondary hover:text-fg-primary transition-colors"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             aria-label="Toggle navigation"
           >
-            {mobileMenuOpen ? <FiX className="w-6 h-6" /> : <FiMenu className="w-6 h-6" />}
+            {mobileMenuOpen ? <X size={22} /> : <List size={22} />}
           </button>
         </div>
 
-        {/* Mobile Navigation */}
         <AnimatePresence>
           {mobileMenuOpen && (
             <motion.div
@@ -60,17 +67,16 @@ export default function Header() {
               initial={{ height: 0, opacity: 0 }}
               animate={{ height: 'auto', opacity: 1 }}
               exit={{ height: 0, opacity: 0 }}
-              transition={{ duration: 0.15, ease: 'easeInOut' }}
+              transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
             >
-              <div className="flex flex-col">
+              <div className="flex flex-col py-2">
                 {navigation.map((item) => (
                   <Link
                     key={item.name}
                     href={item.href}
-                    className="px-4 py-3 border-t border-line first:border-t-0 text-fg-secondary hover:text-accent hover:bg-bg-panel font-mono text-xs tracking-data transition-colors"
+                    className="px-3 py-2.5 rounded-lg text-sm text-fg-secondary hover:text-fg-primary hover:bg-bg-panel transition-colors"
                     onClick={() => setMobileMenuOpen(false)}
                   >
-                    {'>>> '}
                     {item.name}
                   </Link>
                 ))}

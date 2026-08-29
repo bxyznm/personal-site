@@ -1,156 +1,162 @@
 import Link from 'next/link'
-import { FiGithub, FiLinkedin, FiArrowRight, FiTerminal, FiServer, FiCloud } from 'react-icons/fi'
+import { GithubLogo, LinkedinLogo, CloudArrowUp, Cube, Robot, ArrowUpRight } from '@phosphor-icons/react/dist/ssr'
 import { Reveal, RevealGroup, RevealItem } from '@/components/Reveal'
+import MagneticButton from '@/components/MagneticButton'
+import ExperienceCarousel from '@/components/ExperienceCarousel'
+import { experience } from '@/lib/experience'
 
 export default function Home() {
   return (
     <div className="min-h-screen">
-      {/* Hero Section */}
-      <section className="border-b border-line">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24">
-          <div className="lg:flex lg:items-start lg:justify-between lg:gap-12">
-            <Reveal className="lg:max-w-2xl">
-              {/* Status line */}
-              <div className="inline-flex items-center space-x-2 border border-line px-3 py-1.5 mb-8">
-                <span className="w-1.5 h-1.5 bg-accent" />
-                <span className="font-mono text-xs tracking-data text-fg-secondary uppercase">
-                  STATUS: ONLINE <span className="cursor-blink">_</span>
-                </span>
-              </div>
+      {/* Hero */}
+      <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-20 lg:pt-24 lg:pb-28">
+        <div className="lg:grid lg:grid-cols-[1.4fr_1fr] lg:gap-16 lg:items-center">
+          <Reveal>
+            <h1 className="font-display font-black text-4xl sm:text-5xl lg:text-6xl tracking-tightest leading-[1.05] mb-6">
+              I build systems that
+              <br />
+              <span className="text-accent">don&apos;t page you at 3am.</span>
+            </h1>
 
-              {/* Name and Title */}
-              <h1 className="font-display uppercase leading-[0.9] tracking-tightest text-[clamp(2.75rem,7vw,6rem)] mb-6">
-                <span className="text-fg-primary">HI, I&apos;M</span>
-                <br />
-                <span className="text-accent">BRYAN MENDOZA</span>
-              </h1>
+            <p className="text-fg-secondary text-lg max-w-xl mb-8 leading-relaxed">
+              Site Reliability Engineer automating cloud infrastructure, Kubernetes, and
+              CI/CD so things stay online without anyone noticing.
+            </p>
 
-              <h2 className="text-lg sm:text-xl font-mono tracking-data text-fg-secondary mb-8 uppercase">
-                &gt; SRE / DEVOPS ENGINEER
-              </h2>
+            <div className="flex flex-wrap items-center gap-3 mb-8">
+              <MagneticButton href="/projects" variant="primary">
+                View projects
+                <ArrowUpRight size={16} />
+              </MagneticButton>
+              <MagneticButton href="/contact" variant="secondary">
+                Get in touch
+              </MagneticButton>
+            </div>
 
-              <p className="text-fg-secondary max-w-xl mb-10 leading-relaxed">
-                I like breaking things to understand how they work, automating
-                everything I can, and occasionally building random Python projects
-                or exploring web dev just for fun.
-              </p>
+            <div className="flex items-center gap-2">
+              <a
+                href="https://github.com/bxyznm"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="p-2.5 rounded-full text-fg-secondary hover:text-fg-primary hover:bg-bg-panel transition-colors"
+                aria-label="GitHub"
+              >
+                <GithubLogo size={20} />
+              </a>
+              <a
+                href="https://www.linkedin.com/in/brxvn"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="p-2.5 rounded-full text-fg-secondary hover:text-fg-primary hover:bg-bg-panel transition-colors"
+                aria-label="LinkedIn"
+              >
+                <LinkedinLogo size={20} />
+              </a>
+            </div>
+          </Reveal>
 
-              {/* CTAs */}
-              <div className="flex flex-col sm:flex-row gap-0 sm:gap-0 border border-line w-fit mb-10">
-                <Link
-                  href="/projects"
-                  className="px-6 py-3 bg-accent text-bg-primary font-mono font-semibold tracking-data uppercase text-sm hover:bg-fg-primary transition-colors flex items-center justify-center space-x-2"
-                >
-                  <span>View Projects</span>
-                  <FiArrowRight className="w-4 h-4" />
-                </Link>
-                <Link
-                  href="/contact"
-                  className="px-6 py-3 text-fg-primary font-mono font-semibold tracking-data uppercase text-sm hover:bg-bg-panel transition-colors border-t sm:border-t-0 sm:border-l border-line flex items-center justify-center"
-                >
-                  Get in Touch
-                </Link>
-              </div>
-
-              {/* Social Links */}
-              <div className="flex items-stretch border border-line w-fit">
-                <a
-                  href="https://github.com/bxyznm"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="p-3 text-fg-secondary hover:text-accent hover:bg-bg-panel transition-colors"
-                  aria-label="GitHub"
-                >
-                  <FiGithub className="w-5 h-5" />
-                </a>
-                <a
-                  href="https://www.linkedin.com/in/brxvn"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="p-3 text-fg-secondary hover:text-accent hover:bg-bg-panel transition-colors border-l border-line"
-                  aria-label="LinkedIn"
-                >
-                  <FiLinkedin className="w-5 h-5" />
-                </a>
-              </div>
-            </Reveal>
-
-            {/* Terminal Panel */}
-            <Reveal delay={0.1} className="hidden lg:block lg:ml-12 mt-12 lg:mt-0 shrink-0">
-              <div className="crosshair bg-bg-panel border border-line w-96 font-mono text-sm">
-                <div className="flex items-center px-4 py-2 border-b border-line">
-                  <span className="text-fg-secondary text-xs tracking-data uppercase">{'/// TERMINAL'}</span>
-                </div>
-                <div className="p-4 space-y-2">
-                  <samp className="block"><span className="text-accent">$</span> kubectl get pods</samp>
-                  <samp className="block text-fg-secondary">All pods running</samp>
-                  <samp className="block"><span className="text-accent">$</span> terraform plan</samp>
-                  <samp className="block text-fg-secondary">No changes. Infrastructure up-to-date.</samp>
-                  <samp className="block"><span className="text-accent">$</span> <span className="cursor-blink">_</span></samp>
-                </div>
-              </div>
-            </Reveal>
-          </div>
+          <Reveal delay={0.15} className="mt-12 lg:mt-0 lg:rotate-1">
+            <p className="text-sm text-fg-secondary mb-3">Where I&apos;ve worked</p>
+            <ExperienceCarousel entries={experience} />
+          </Reveal>
         </div>
       </section>
 
-      {/* What I Do Section */}
-      <section className="border-b border-line">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-          <Reveal className="mb-10">
-            <h2 className="font-mono text-xs tracking-data text-fg-secondary uppercase pb-2 border-b border-line">
-              [ WHAT I DO ]
-            </h2>
+      {/* What I Do */}
+      <section className="border-t border-line">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-20">
+          <Reveal className="mb-10 max-w-lg">
+            <h2 className="font-display font-bold text-2xl sm:text-3xl tracking-tightest">What I do</h2>
           </Reveal>
 
-          <RevealGroup className="grid md:grid-cols-3 border border-line divide-y md:divide-y-0 md:divide-x divide-line">
-            <RevealItem className="p-8">
-              <FiCloud className="w-6 h-6 text-accent mb-4" />
-              <h3 className="font-mono font-semibold text-sm tracking-data uppercase mb-3">Cloud Stuff</h3>
+          <RevealGroup className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+            <RevealItem className="lg:col-span-2 bg-bg-panel border border-line rounded-2xl p-8 lg:flex lg:items-center lg:gap-8">
+              <div className="w-12 h-12 rounded-full bg-accent/10 flex items-center justify-center shrink-0 mb-4 lg:mb-0">
+                <CloudArrowUp size={24} className="text-accent" />
+              </div>
+              <div>
+                <h3 className="font-display font-bold text-lg text-fg-primary mb-2 tracking-tightest">Cloud infrastructure</h3>
+                <p className="text-fg-secondary leading-relaxed">
+                  Setting up cloud infrastructure that actually makes sense across AWS, GCP, and
+                  Azure, all defined as code with Terraform.
+                </p>
+              </div>
+            </RevealItem>
+
+            <RevealItem className="bg-bg-panel border border-line rounded-2xl p-8">
+              <div className="w-11 h-11 rounded-full bg-accent/10 flex items-center justify-center mb-4">
+                <Cube size={22} className="text-accent" />
+              </div>
+              <h3 className="font-display font-bold text-lg text-fg-primary mb-2 tracking-tightest">Containers &amp; Kubernetes</h3>
               <p className="text-fg-secondary text-sm leading-relaxed">
-                Setting up cloud infrastructure that actually makes sense. AWS, GCP, Azure -
-                and yes, everything as code with Terraform because clicking buttons is boring.
+                Running clusters and containers, keeping microservices talking to each
+                other reliably.
               </p>
             </RevealItem>
 
-            <RevealItem className="p-8">
-              <FiServer className="w-6 h-6 text-accent mb-4" />
-              <h3 className="font-mono font-semibold text-sm tracking-data uppercase mb-3">Containers &amp; K8s</h3>
-              <p className="text-fg-secondary text-sm leading-relaxed">
-                Wrangling Kubernetes clusters and Docker containers. Making sure
-                microservices play nice with each other.
-              </p>
-            </RevealItem>
-
-            <RevealItem className="p-8">
-              <FiTerminal className="w-6 h-6 text-accent mb-4" />
-              <h3 className="font-mono font-semibold text-sm tracking-data uppercase mb-3">Automation Nerd</h3>
-              <p className="text-fg-secondary text-sm leading-relaxed">
-                If I have to do something twice, I&apos;m writing a script for it.
-                CI/CD pipelines, GitHub Actions, you name it.
-              </p>
+            <RevealItem className="lg:col-span-3 bg-bg-panel border border-line rounded-2xl p-8 lg:flex lg:items-center lg:gap-8">
+              <div className="w-11 h-11 rounded-full bg-accent/10 flex items-center justify-center shrink-0 mb-4 lg:mb-0">
+                <Robot size={22} className="text-accent" />
+              </div>
+              <div>
+                <h3 className="font-display font-bold text-lg text-fg-primary mb-2 tracking-tightest">Automation &amp; CI/CD</h3>
+                <p className="text-fg-secondary text-sm leading-relaxed max-w-2xl">
+                  If I have to do something twice, I write a script for it. GitHub Actions
+                  pipelines included.
+                </p>
+              </div>
             </RevealItem>
           </RevealGroup>
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section>
-        <Reveal className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 text-center">
-          <h2 className="font-display uppercase leading-[0.9] tracking-tightest text-[clamp(2rem,5vw,3.5rem)] mb-6">
-            WANT TO <span className="text-accent">WORK TOGETHER</span>?
+      {/* Featured project spotlight */}
+      <section className="border-t border-line">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-20">
+          <Reveal>
+            <div className="bg-bg-panel border border-line rounded-2xl p-8 lg:p-12 lg:grid lg:grid-cols-[1fr_auto] lg:gap-12 lg:items-center">
+              <div>
+                <p className="text-sm text-fg-secondary mb-3">Selected work</p>
+                <h3 className="font-display font-bold text-2xl sm:text-3xl tracking-tightest mb-4">
+                  Cloud Cost Optimizer
+                </h3>
+                <p className="text-fg-secondary leading-relaxed max-w-xl mb-6">
+                  An open-source tool that analyzes cloud infrastructure and surfaces
+                  actionable recommendations to cut costs across AWS, GCP, and Azure.
+                </p>
+                <div className="flex flex-wrap gap-1.5">
+                  {['Python', 'AWS', 'GCP', 'Azure'].map((tag) => (
+                    <span key={tag} className="text-xs text-fg-secondary bg-bg-secondary rounded-full px-2.5 py-1">
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              </div>
+              <div className="mt-8 lg:mt-0 shrink-0">
+                <MagneticButton href="/projects" variant="primary">
+                  View projects
+                  <ArrowUpRight size={16} />
+                </MagneticButton>
+              </div>
+            </div>
+          </Reveal>
+        </div>
+      </section>
+
+      {/* CTA */}
+      <section className="border-t border-line">
+        <Reveal className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-28 text-center">
+          <h2 className="font-display font-bold text-3xl sm:text-4xl tracking-tightest mb-5">
+            Want to work together?
           </h2>
-          <p className="text-fg-secondary mb-10 max-w-xl mx-auto">
-            Whether you have a cool project in mind, a job opportunity,
-            or just want to geek out about tech - I&apos;m down to chat.
+          <p className="text-fg-secondary mb-8 max-w-xl mx-auto">
+            Whether it is a project, a role, or just talking shop about infrastructure,
+            I am happy to chat.
           </p>
-          <Link
-            href="/contact"
-            className="inline-flex items-center space-x-2 px-8 py-4 bg-accent text-bg-primary font-mono font-semibold tracking-data uppercase text-sm hover:bg-fg-primary transition-colors"
-          >
-            <span>Let&apos;s Connect</span>
-            <FiArrowRight className="w-4 h-4" />
-          </Link>
+          <MagneticButton href="/contact" variant="primary">
+            Get in touch
+            <ArrowUpRight size={16} />
+          </MagneticButton>
         </Reveal>
       </section>
     </div>

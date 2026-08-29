@@ -1,29 +1,28 @@
-import { IconType } from 'react-icons'
+import type { Icon } from '@phosphor-icons/react'
 
 interface SkillCardProps {
   title: string
-  skills: {
-    name: string
-    icon?: IconType
-  }[]
-  icon: IconType
+  skills: { name: string }[]
+  icon: Icon
 }
 
-export default function SkillCard({ title, skills, icon: Icon }: SkillCardProps) {
+export default function SkillCard({ title, skills, icon: IconComponent }: SkillCardProps) {
   return (
-    <div className="bg-bg-panel border border-line panel-hover p-6">
-      <div className="flex items-center space-x-3 mb-4 pb-4 border-b border-line">
-        <Icon className="w-5 h-5 text-accent shrink-0" />
-        <h3 className="font-mono font-semibold text-xs tracking-data text-fg-primary uppercase">{title}</h3>
+    <div className="bg-bg-panel border border-line rounded-2xl panel-hover p-6">
+      <div className="flex items-center gap-3 mb-4">
+        <div className="w-10 h-10 rounded-full bg-accent/10 flex items-center justify-center shrink-0">
+          <IconComponent size={18} className="text-accent" />
+        </div>
+        <h3 className="font-semibold text-sm text-fg-primary">{title}</h3>
       </div>
-      <div className="flex flex-wrap gap-2">
+      <div className="flex flex-wrap gap-1.5">
         {skills.map((skill) => (
-          <kbd
+          <span
             key={skill.name}
-            className="px-2 py-1 bg-bg-secondary text-fg-secondary text-xs font-mono border border-line hover:border-accent hover:text-accent transition-colors"
+            className="px-2.5 py-1 bg-bg-secondary text-fg-secondary text-xs rounded-full"
           >
             {skill.name}
-          </kbd>
+          </span>
         ))}
       </div>
     </div>
