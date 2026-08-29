@@ -118,14 +118,15 @@ export default function Home() {
               <div>
                 <p className="text-sm text-fg-secondary mb-3">Selected work</p>
                 <h3 className="font-display font-bold text-2xl sm:text-3xl tracking-tightest mb-4">
-                  Cloud Cost Optimizer
+                  Projects in progress
                 </h3>
                 <p className="text-fg-secondary leading-relaxed max-w-xl mb-6">
-                  An open-source tool that analyzes cloud infrastructure and surfaces
-                  actionable recommendations to cut costs across AWS, GCP, and Azure.
+                  I am building out a portfolio of security and infrastructure projects — cloud
+                  cost optimization, DevSecOps pipelines, and observability tooling. Full details
+                  are on the way.
                 </p>
                 <div className="flex flex-wrap gap-1.5">
-                  {['Python', 'AWS', 'GCP', 'Azure'].map((tag) => (
+                  {['DevSecOps', 'Cloud', 'Kubernetes', 'Automation'].map((tag) => (
                     <span key={tag} className="text-xs text-fg-secondary bg-bg-secondary rounded-full px-2.5 py-1">
                       {tag}
                     </span>
